@@ -13,8 +13,10 @@
     "windows": [
       {
         "title": "synonik",
+        "visible": false,
         "width": 800,
-        "height": 600
+        "height": 600,
+        "decorations": true
       }
     ],
     "security": {
@@ -25,7 +27,7 @@
     "active": true,
     "targets": "all",
     "resources": {
-      "../synonik.db": "synonik.db"
+      "../database.sqlite": "database.sqlite"
     },
     "icon": [
       "icons/32x32.png",

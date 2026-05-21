@@ -1,0 +1,8 @@
+- Znaczenia grup synonimów na bazie bielika
+- UI lepsze?
+- Ikona
+- Dodawanie własnych synonimów, grup, znaczeń
+- Usuwanie synonimów
+- Wysyłanie sugestii czy tam zapis gdzieś
+- Aktualizacja programu
+- Aktualizacja bazy i dodanie własnych wpisów ponownie
