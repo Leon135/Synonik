@@ -1,14 +1,18 @@
 use tauri::plugin::TauriPlugin;
 use tauri_plugin_autostart::{MacosLauncher, ManagerExt};
 
-pub fn change_autostart(app: &tauri::AppHandle) {
-    let autostart_manager = app.autolaunch();
-
-    if autostart_manager.is_enabled().unwrap_or(false) {
-        autostart_manager.disable().ok();
+pub fn toggle_autostart(app: &tauri::AppHandle) {
+    let manager = app.autolaunch();
+    if manager.is_enabled().unwrap_or(false) {
+        manager.disable().ok();
     } else {
-        autostart_manager.enable().ok();
+        manager.enable().ok();
     }
+}
+
+pub fn is_autostart_enabled(app: &tauri::AppHandle) -> bool {
+    let autostart_manager = app.autolaunch();
+    autostart_manager.is_enabled().unwrap_or(false)
 }
 
 pub fn autostart_plugin() -> TauriPlugin<tauri::Wry> {

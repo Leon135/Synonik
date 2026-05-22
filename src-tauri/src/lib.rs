@@ -19,7 +19,6 @@ pub fn run() {
 
             let _ = tray::setup_tray(app);
 
-
             Ok(())
         })
         .on_window_event(|window, event| {
