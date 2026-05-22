@@ -1,6 +1,6 @@
 use tauri::{
     menu::{Menu, MenuItem},
-    tray::TrayIconBuilder,
+    tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
 };
 
 use crate::autostart::change_autostart;
@@ -15,7 +15,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
     let _tray = TrayIconBuilder::new()
         .icon(app.default_window_icon().unwrap().clone())
         .menu(&menu)
-        .show_menu_on_left_click(true)
+        .show_menu_on_left_click(false)
         .on_menu_event(|app: &tauri::AppHandle, event| match event.id.as_ref() {
             "show" => {
                 show_app(app);
@@ -27,6 +27,18 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
                 quit_app(app);
             }
             _ => {}
-        }).build(app)?;
+        })
+        .on_tray_icon_event(|tray, event| match event {
+            TrayIconEvent::DoubleClick {
+                id: _id,
+                position: _position,
+                rect: _rect,
+                button: MouseButton::Left,
+            } => {
+                show_app(tray.app_handle());
+            }
+            _ => {}
+        })
+        .build(app)?;
     Ok(())
 }
