@@ -1,20 +1,17 @@
-import Database from '@tauri-apps/plugin-sql';
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import SynonymsContainer from './components/SynonymsContainer';
-import { Synonym, SynonymGroup } from "./types/types";
+import { Synonym, SynonymGroup } from "./types/ResponseTypes";
 
 import "react-windows-ui/config/app-config.css";
 import "react-windows-ui/dist/react-windows-ui.min.css";
 import "react-windows-ui/icons/winui-icons.min.css";
 import "./css/theme.css";
 
+import { invoke } from '@tauri-apps/api/core';
 import { listen, type Event } from '@tauri-apps/api/event';
 import { AppContainer, AppTheme, Button, InputText } from "react-windows-ui";
 
-type Db = Awaited<ReturnType<typeof Database.load>>
-
 function App() {
-  const dbRef = useRef<Db | null>(null);
   const [wordInput, setWordInput] = useState("");
   const [synonymGroups, setSynonymGroups] = useState<SynonymGroup[]>([]);
   const [success, setSuccess] = useState(false);
@@ -25,7 +22,6 @@ function App() {
     let unlisten: (() => void) | undefined;
 
     async function init() {
-      dbRef.current = await Database.load("sqlite:synonik.db");
 
       unlisten = await listen("shortcut-pressed-input", (event: Event<string>) => {
         setWordInput(event.payload);
@@ -38,57 +34,35 @@ function App() {
     return () => { unlisten?.(); };
   }, []);
 
-
-  function get_db() {
-    const db = dbRef.current;
-    if (!db) throw new Error("Database not initialized");
-    return db;
-  }
-
   async function get_synonyms(word: string) {
     if (!word.trim()) return;
     setIsLoading(true);
 
-    const db = get_db();
+    invoke<[string, string]>("search_synonyms", { word: word.trim() }).then((response: [string, string]) => {
+      console.log(typeof response);
 
-    const query = `
-    WITH base_form_id AS(
-      SELECT bf.base_form_id
-        FROM Words w
-        JOIN BaseForms bf ON w.id = bf.word_id
-        WHERE w.word = ?
-    ),
-      group_ids AS(
-        SELECT DISTINCT group_id
-        FROM WordInGroup
-        WHERE word_id IN(SELECT base_form_id FROM base_form_id)
-      )
-    SELECT DISTINCT w.word, sg.group_meaning
-    FROM WordInGroup wig
-    JOIN Words w ON wig.word_id = w.id
-    JOIN SynonymGroups sg ON wig.group_id = sg.id
-    WHERE wig.group_id IN(SELECT group_id FROM group_ids)
-      AND wig.word_id NOT IN(SELECT base_form_id FROM base_form_id)
-    `
+      const groups = new Map<string, SynonymGroup>();
 
-    const rows = await db.select<Synonym[]>(query, [word])
+      for (let [word, group_meaning] of response) {
+        console.log(group_meaning);
+        if (!groups.has(group_meaning)) {
+          groups.set(group_meaning, {
+            group_meaning: group_meaning,
+            synonyms: []
+          });
+        }
 
-    const groups = new Map<string, SynonymGroup>()
-
-    for (const row of rows) {
-      if (!groups.has(row.group_meaning)) {
-        groups.set(row.group_meaning, {
-          group_meaning: row.group_meaning,
-          synonyms: []
-        })
+        groups.get(group_meaning)?.synonyms.push(word);
       }
-      groups.get(row.group_meaning)!.synonyms.push(row.word)
-    }
 
-    const result: SynonymGroup[] = Array.from(groups.values())
-    setSuccess(result.length > 0);
-    setShowSynonyms(true);
-    setSynonymGroups(result);
+      const result = Array.from(groups.values());
+      console.log(groups);
+      setSuccess(result.length > 0);
+      setShowSynonyms(true);
+      setSynonymGroups(result);
+    });
+
+
     setIsLoading(false);
   }
 

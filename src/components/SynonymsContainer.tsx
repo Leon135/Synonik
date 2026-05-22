@@ -1,4 +1,4 @@
-import { SynonymGroup } from "../types/types";
+import { SynonymGroup } from "../types/ResponseTypes";
 
 export default function SynonymsContainer({ success, word, synonymGroups }: { success: boolean; word: string; synonymGroups: SynonymGroup[] }) {
   if (!success && synonymGroups.length === 0) {

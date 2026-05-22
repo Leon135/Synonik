@@ -1,9 +1,15 @@
+use diesel::prelude::*;
+use diesel::sqlite::SqliteConnection;
+use std::sync::Mutex;
+use tauri::Manager;
 use tauri::WindowEvent;
 mod autostart;
 mod db;
 mod shortcut;
 mod tray;
 mod window;
+
+pub struct DbState(pub Mutex<SqliteConnection>);
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -14,8 +20,13 @@ pub fn run() {
         .plugin(tauri_plugin_sql::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_user_input::init())
+        .invoke_handler(tauri::generate_handler![db::manager::search_synonyms])
         .setup(|app| {
             db::prepare_db(app);
+
+            let db_path = app.path().app_config_dir().unwrap().join("database.sqlite");
+            let conn = SqliteConnection::establish(db_path.to_str().unwrap()).unwrap();
+            app.manage(DbState(Mutex::new(conn)));
 
             let _ = tray::setup_tray(app);
 

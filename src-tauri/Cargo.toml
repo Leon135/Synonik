@@ -26,6 +26,8 @@ tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 tauri-plugin-clipboard-manager = "2"
 tauri-plugin-user-input = "0.1"
 monio = "0.1.1"
+diesel = { version = "2", features = ["sqlite"] }
+diesel_migrations = "2"
 
 [profile.dev]
 incremental = true
