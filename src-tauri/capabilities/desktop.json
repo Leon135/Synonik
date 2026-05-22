@@ -1,17 +1,13 @@
 {
   "identifier": "desktop-capability",
-  "platforms": [
-    "macOS",
-    "windows",
-    "linux"
-  ],
-  "windows": [
-    "main"
-  ],
+  "platforms": ["macOS", "windows", "linux"],
+  "windows": ["main"],
   "permissions": [
     "global-shortcut:allow-is-registered",
     "global-shortcut:allow-register",
     "global-shortcut:allow-unregister",
+    "core:event:allow-listen",
+    "core:event:allow-emit-to",
     "core:app:allow-default-window-icon",
     "core:window:allow-show",
     "core:window:allow-hide",

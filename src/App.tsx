@@ -1,6 +1,5 @@
 import Database from '@tauri-apps/plugin-sql';
 import { useEffect, useRef, useState } from "preact/hooks";
-import { CleanupTray, SetupTray } from './backend/TrayIcon';
 import SynonymsContainer from './components/SynonymsContainer';
 import { Synonym, SynonymGroup } from "./types/types";
 
@@ -9,6 +8,7 @@ import "react-windows-ui/dist/react-windows-ui.min.css";
 import "react-windows-ui/icons/winui-icons.min.css";
 import "./css/theme.css";
 
+import { listen, type Event } from '@tauri-apps/api/event';
 import { AppContainer, AppTheme, Button, InputText } from "react-windows-ui";
 
 type Db = Awaited<ReturnType<typeof Database.load>>
@@ -22,16 +22,22 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    async function initDb() {
+    let unlisten: (() => void) | undefined;
+
+    async function init() {
       dbRef.current = await Database.load("sqlite:synonik.db");
+
+      unlisten = await listen("shortcut-pressed-input", (event: Event<string>) => {
+        setWordInput(event.payload);
+        get_synonyms(event.payload);
+      });
     }
-    initDb();
+
+    init();
+
+    return () => { unlisten?.(); };
   }, []);
 
-  useEffect(() => {
-    SetupTray();
-    return () => { CleanupTray(); };
-  }, []);
 
   function get_db() {
     const db = dbRef.current;

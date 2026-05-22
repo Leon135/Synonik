@@ -1,0 +1,45 @@
+use tauri::plugin::TauriPlugin;
+use tauri::Emitter;
+use tauri_plugin_clipboard_manager::ClipboardExt;
+use tauri_plugin_global_shortcut::{Code, Modifiers, Shortcut, ShortcutState};
+use tauri_plugin_user_input::{EventType, UserInputExt};
+
+use crate::window::show_app;
+
+fn get_selected_text(app: &tauri::AppHandle) -> String {
+    let user_input = app.user_input();
+
+    let previous_clipboard = app.clipboard().read_text();
+
+    let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyPress);
+    let _ = user_input.key(monio::Key::KeyC, EventType::KeyPress);
+    let _ = user_input.key(monio::Key::KeyC, EventType::KeyRelease);
+    let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyRelease);
+
+    std::thread::sleep(std::time::Duration::from_millis(50));
+
+    let new_clipboard = app.clipboard().read_text();
+
+    app.clipboard()
+        .write_text(previous_clipboard.unwrap_or_default())
+        .ok();
+    new_clipboard.unwrap_or_default()
+}
+
+fn handle_shortcut_action(app: &tauri::AppHandle) {
+    let selected_text = get_selected_text(app);
+    show_app(app);
+    let _ = app.emit_to("main", "shortcut-pressed-input", selected_text);
+}
+
+pub fn shortcut_plugin() -> TauriPlugin<tauri::Wry> {
+    let shortcut = Shortcut::new(Some(Modifiers::CONTROL), Code::F2);
+    tauri_plugin_global_shortcut::Builder::new()
+        .with_shortcut(shortcut).unwrap()
+        .with_handler(move |_app, _shortcut, event| {
+            if _shortcut == &shortcut && event.state() == ShortcutState::Pressed {
+                handle_shortcut_action(_app);
+            }
+        })
+        .build()
+}
