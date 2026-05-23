@@ -1,11 +1,12 @@
 use std::sync::Arc;
 
 use tauri::{
-    menu::{CheckMenuItem, Menu, MenuItem},
+    image::Image,
+    menu::{CheckMenuItem, IconMenuItem, Menu, MenuItem, PredefinedMenuItem},
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
 };
 
-use crate::autostart::{toggle_autostart, is_autostart_enabled};
+use crate::autostart::{is_autostart_enabled, toggle_autostart};
 use crate::window::{quit_app, show_app};
 
 pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
@@ -19,7 +20,14 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
         None::<&str>,
     )?);
     let quit_element = MenuItem::with_id(app, "quit", "Wyjdź", true, None::<&str>)?;
-    let menu = Menu::with_items(app, &[&show_element, &*autostart, &quit_element])?;
+    let menu = Menu::with_items(
+        app,
+        &[
+            &show_element,
+            &*autostart,
+            &quit_element,
+        ],
+    )?;
 
     let _tray = TrayIconBuilder::new()
         .icon(app.default_window_icon().unwrap().clone())

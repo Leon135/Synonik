@@ -1,5 +1,4 @@
-- Znaczenia grup synonimów na bazie bielika
-- UI lepsze?
+- Znaczenia grup synonimów na bazie bielika?
 - Ikona
 - Dodawanie własnych synonimów, grup, znaczeń
 - Usuwanie synonimów

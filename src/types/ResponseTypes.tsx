@@ -5,5 +5,5 @@ export type Synonym = {
 
 export type SynonymGroup = {
     group_meaning: string
-    synonyms: String[]
+    synonyms: string[]
 }

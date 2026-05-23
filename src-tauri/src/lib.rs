@@ -20,7 +20,10 @@ pub fn run() {
         .plugin(tauri_plugin_sql::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_user_input::init())
-        .invoke_handler(tauri::generate_handler![db::manager::search_synonyms])
+        .invoke_handler(tauri::generate_handler![
+            db::manager::search_synonyms,
+            window::quit_app_command
+        ])
         .setup(|app| {
             db::prepare_db(app);
 

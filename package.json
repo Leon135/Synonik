@@ -10,10 +10,9 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "core-js": "^3.39.0",
     "preact": "^10.25.1",
     "@tauri-apps/api": "^2",
-    "react-windows-ui": "^4.2.4"
+    "open-props": "^1.7.8"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.3",
