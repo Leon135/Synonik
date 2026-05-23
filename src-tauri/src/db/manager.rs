@@ -1,6 +1,5 @@
 use diesel::dsl::*;
 use diesel::prelude::*;
-use diesel::sqlite::SqliteConnection;
 use std::{fs, path::PathBuf};
 use tauri::Manager;
 

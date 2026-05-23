@@ -1,8 +1,7 @@
 use std::sync::Arc;
 
 use tauri::{
-    image::Image,
-    menu::{CheckMenuItem, IconMenuItem, Menu, MenuItem, PredefinedMenuItem},
+    menu::{CheckMenuItem, Menu, MenuItem},
     tray::{MouseButton, TrayIconBuilder, TrayIconEvent},
 };
 
