@@ -1,5 +1,7 @@
 use diesel::dsl::*;
 use diesel::prelude::*;
+use std::error::Error;
+use std::io;
 use std::{fs, path::PathBuf};
 use tauri::Manager;
 
@@ -24,18 +26,23 @@ fn find_source_db(app: &tauri::App) -> Option<PathBuf> {
     candidates.into_iter().flatten().find(|p| p.exists())
 }
 
-pub fn prepare_db(app: &tauri::App) {
-    let app_config_dir = app
-        .path()
-        .app_config_dir()
-        .expect("failed to get app config dir");
+pub fn prepare_db(app: &tauri::App) -> Result<(), Box<dyn Error>> {
+    let app_config_dir = app.path().app_config_dir().map_err(|_| -> Box<dyn Error> {
+        io::Error::other("failed to get app config dir").into()
+    })?;
     fs::create_dir_all(&app_config_dir).ok();
     let db_path = app_config_dir.join("database.sqlite");
     if !db_path.exists() {
-        let source = find_source_db(app)
-            .expect("database.sqlite not found in resources, project root, or cwd");
-        fs::copy(&source, &db_path).expect("failed to copy database file to app config dir");
-    };
+        let source = find_source_db(app).ok_or_else(|| -> Box<dyn Error> {
+            io::Error::new(
+                io::ErrorKind::NotFound,
+                "database.sqlite not found in resources, project root, or cwd",
+            )
+            .into()
+        })?;
+        fs::copy(&source, &db_path)?;
+    }
+    Ok(())
 }
 
 #[tauri::command]

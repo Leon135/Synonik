@@ -25,10 +25,14 @@ pub fn run() {
             window::quit_app_command
         ])
         .setup(|app| {
-            db::prepare_db(app);
+            db::prepare_db(app)?;
 
-            let db_path = app.path().app_config_dir().unwrap().join("database.sqlite");
-            let conn = SqliteConnection::establish(db_path.to_str().unwrap()).unwrap();
+            let db_path = app.path().app_config_dir()?.join("database.sqlite");
+            let conn = SqliteConnection::establish(
+                db_path
+                    .to_str()
+                    .ok_or_else(|| "invalid database path".to_string())?,
+            )?;
             app.manage(DbState(Mutex::new(conn)));
 
             let _ = tray::setup_tray(app);
