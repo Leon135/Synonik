@@ -1,0 +1,22 @@
+.error-container {
+  margin-top: var(--size-5);
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius-2);
+  padding: var(--size-3) var(--size-4);
+  margin-bottom: var(--size-5);
+}
+
+.error-container h4 {
+  margin: 0 0 var(--size-1);
+  color: var(--error);
+  font-size: var(--font-size--1);
+  font-weight: 600;
+}
+
+.error-container p {
+  margin: 0;
+  color: #f1aeb5;
+  font-size: var(--font-size--1);
+  line-height: 1.5;
+}

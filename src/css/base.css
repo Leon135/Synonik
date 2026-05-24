@@ -1,0 +1,42 @@
+:root {
+  --brand: #a94dc1;
+  --brand-hover: #ce5fea;
+  --error: #dc3545;
+  --error-bg: #2a0a0e;
+  --error-border: #58151c;
+  --surface-1: #000;
+  --surface-2: #000;
+  --surface-3: #111;
+  --surface-4: #4a4a4a;
+  --text-1: #ffffffd2;
+  --text-2: #aaa;
+  color-scheme: dark;
+  font-size: 18px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --surface-1: #000;
+    --surface-2: #000;
+    --surface-3: #111;
+    --surface-4: #fff;
+    --text-1: #fff;
+    --text-2: #aaa;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes window-controls-animation {
+  to {
+    color: var(--brand);
+  }
+}
+
+body {
+  margin: 0;
+}

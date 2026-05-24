@@ -1,0 +1,51 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-2);
+  padding: var(--size-2) var(--size-5);
+  border-bottom: 1px solid var(--surface-4);
+  background: var(--surface-2);
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header__title-container {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+}
+
+.header__icon {
+  inline-size: var(--size-6);
+  color: var(--brand);
+}
+
+.header__title {
+  font-size: var(--font-size--1);
+  font-weight: 600;
+  color: var(--text-1);
+}
+
+.header__window-controls {
+  display: flex;
+  gap: var(--size-2);
+}
+
+.header__window-controls-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--size-1);
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-2);
+}
+
+.header__window-controls-button:hover {
+  color: var(--text-1);
+  animation: window-controls-animation 0.15s forwards;
+}

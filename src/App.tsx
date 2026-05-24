@@ -5,6 +5,8 @@ import { type SynonymGroup } from "./types/ResponseTypes";
 
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
+import ErrorContainer from "./components/ErrorContainer";
+import "./css/app.css";
 
 function App() {
   const [wordInput, setWordInput] = useState("");
@@ -13,6 +15,7 @@ function App() {
   const [showSynonyms, setShowSynonyms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let unlisten: (() => void) | undefined;
@@ -27,6 +30,8 @@ function App() {
     init();
     return () => { unlisten?.(); };
   }, []);
+
+
 
   async function get_synonyms(word: string) {
     if (!word.trim()) return;
@@ -49,12 +54,12 @@ function App() {
       return result;
 
     }).then((result) => {
+      setError("");
       setSuccess(result.length > 0);
       setShowSynonyms(true);
       setSynonymGroups(result);
     }).catch((error) => {
-      alert("Wystąpił błąd podczas wyszukiwania synonimów: " + error);
-      console.error(error);
+      setError(error);
       setSuccess(false);
     }).finally(() => {
       setIsLoading(false);
@@ -145,6 +150,9 @@ function App() {
 
         {showSynonyms && !isLoading && (
           <SynonymsContainer success={success} word={wordInput.trim()} synonymGroups={synonymGroups} />
+        )}
+        {error.length > 0 && (
+          <ErrorContainer error={error} />
         )}
       </main>
     </div>
