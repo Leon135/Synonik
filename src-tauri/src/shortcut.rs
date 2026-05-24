@@ -9,21 +9,31 @@ use crate::window::show_app;
 fn get_selected_text(app: &tauri::AppHandle) -> String {
     let user_input = app.user_input();
 
-    let previous_clipboard = app.clipboard().read_text();
+    let previous_clipboard = app.clipboard().read_text().unwrap_or_default();
 
-    let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyPress);
-    let _ = user_input.key(monio::Key::KeyC, EventType::KeyPress);
-    let _ = user_input.key(monio::Key::KeyC, EventType::KeyRelease);
-    let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyRelease);
+    let mut new_clipboard = app.clipboard().read_text().unwrap_or_default();
+    let mut wait_time = 50;
+    let mut attempts = 0;
 
-    std::thread::sleep(std::time::Duration::from_millis(50));
+    while (new_clipboard == previous_clipboard || new_clipboard.is_empty()) && attempts < 5 {
+        attempts += 1;
+        let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyPress);
+        let _ = user_input.key(monio::Key::KeyC, EventType::KeyPress);
+        let _ = user_input.key(monio::Key::KeyC, EventType::KeyRelease);
+        let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyRelease);
 
-    let new_clipboard = app.clipboard().read_text();
+        std::thread::sleep(std::time::Duration::from_millis(wait_time));
 
-    app.clipboard()
-        .write_text(previous_clipboard.unwrap_or_default())
-        .ok();
-    new_clipboard.unwrap_or_default()
+        new_clipboard = app.clipboard().read_text().unwrap_or_default();
+        wait_time *= 2;
+    }
+
+    if new_clipboard == previous_clipboard || new_clipboard.is_empty() {
+        return String::new();
+    }
+
+    app.clipboard().write_text(previous_clipboard).ok();
+    new_clipboard
 }
 
 fn handle_shortcut_action(app: &tauri::AppHandle) {
@@ -35,7 +45,8 @@ fn handle_shortcut_action(app: &tauri::AppHandle) {
 pub fn shortcut_plugin() -> TauriPlugin<tauri::Wry> {
     let shortcut = Shortcut::new(Some(Modifiers::CONTROL), Code::F2);
     tauri_plugin_global_shortcut::Builder::new()
-        .with_shortcut(shortcut).unwrap()
+        .with_shortcut(shortcut)
+        .unwrap()
         .with_handler(move |_app, _shortcut, event| {
             if _shortcut == &shortcut && event.state() == ShortcutState::Pressed {
                 handle_shortcut_action(_app);
