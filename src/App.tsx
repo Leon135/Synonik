@@ -26,13 +26,13 @@ function App() {
 
     init();
     return () => { unlisten?.(); };
-  }, []); 
+  }, []);
 
   async function get_synonyms(word: string) {
     if (!word.trim()) return;
     setIsLoading(true);
 
-    invoke<[string, string]>("search_synonyms", { word: word.trim().toLowerCase() }).then((response) => {
+    invoke<[string, string][]>("search_synonyms", { word: word.trim().toLowerCase() }).then((response) => {
       const groups = new Map<string, SynonymGroup>();
 
       for (let [word, group_meaning] of response) {
@@ -46,12 +46,19 @@ function App() {
       }
 
       const result = Array.from(groups.values());
+      return result;
+
+    }).then((result) => {
       setSuccess(result.length > 0);
       setShowSynonyms(true);
       setSynonymGroups(result);
+    }).catch((error) => {
+      alert("Wystąpił błąd podczas wyszukiwania synonimów: " + error);
+      console.error(error);
+      setSuccess(false);
+    }).finally(() => {
+      setIsLoading(false);
     });
-
-    setIsLoading(false);
   }
 
   function onInputChange(e: any) {
