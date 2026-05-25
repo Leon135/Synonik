@@ -20,6 +20,7 @@
   display: flex;
   gap: var(--size-2);
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .search__input-wrapper {
@@ -163,4 +164,20 @@
   padding-top: var(--size-2);
   border-top: 1px solid var(--surface-4);
   font-size: var(--font-size--2);
+}
+
+@media (max-width: 500px) {
+  .main {
+    padding: var(--size-4);
+  }
+
+  .search__input-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+    justify-content: center;
+  }
 }

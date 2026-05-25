@@ -16,6 +16,8 @@
         "visible": false,
         "width": 800,
         "height": 600,
+        "minWidth": 360,
+        "minHeight": 300,
         "decorations": false,
         "zoomHotkeysEnabled": true
       }
