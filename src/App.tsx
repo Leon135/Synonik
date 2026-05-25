@@ -1,10 +1,11 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import SynonymsContainer from "./components/SynonymsContainer";
 import Titlebar from "./components/Titlebar";
 import { type SynonymGroup } from "./types/ResponseTypes";
 
 import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
+import { useHotkeys } from "react-hotkeys-hook";
 import ErrorContainer from "./components/ErrorContainer";
 import "./css/app.css";
 
@@ -16,6 +17,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [error, setError] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useHotkeys(["ctrl+l", "/"], () => {
+    inputRef.current?.focus();
+  }, { preventDefault: true, useKey: true });
 
   useEffect(() => {
     let unlisten: (() => void) | undefined;
@@ -111,6 +117,7 @@ function App() {
         <form class="search" onSubmit={(e) => { e.preventDefault(); get_synonyms(wordInput); }}>
           <div class="search__input-wrapper">
             <input
+              ref={inputRef}
               class="search__input"
               placeholder="Wpisz słowo..."
               value={wordInput}
