@@ -1,4 +1,3 @@
-import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow, Window } from "@tauri-apps/api/window";
 import "../css/titlebar.css";
 export default function Titlebar() {
@@ -8,10 +7,10 @@ export default function Titlebar() {
         switch (action) {
             case "minimize":
                 appWindow.minimize();
-                appWindow.hide();
                 break;
             case "close":
-                invoke("quit_app_command");
+                appWindow.minimize();
+                appWindow.hide();
                 break;
         }
     }
