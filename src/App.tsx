@@ -82,6 +82,7 @@ function App() {
 
   function onKeyDown(e: any) {
     if (e.key === "Enter") get_synonyms(wordInput);
+    if (e.key === "ArrowRight") (document.querySelector(".card") as HTMLElement)?.focus();
   }
 
   function onClear() {
