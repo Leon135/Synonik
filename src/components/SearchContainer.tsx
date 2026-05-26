@@ -1,3 +1,4 @@
+import "../css/search-container.css";
 import useSearch from "../hooks/useSearch";
 import useShortcuts from "../hooks/useShortcuts";
 import ErrorMessage from "./ErrorMessage";
