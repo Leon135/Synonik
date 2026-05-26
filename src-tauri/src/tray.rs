@@ -19,14 +19,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
         None::<&str>,
     )?);
     let quit_element = MenuItem::with_id(app, "quit", "Wyjdź", true, None::<&str>)?;
-    let menu = Menu::with_items(
-        app,
-        &[
-            &show_element,
-            &*autostart,
-            &quit_element,
-        ],
-    )?;
+    let menu = Menu::with_items(app, &[&show_element, &*autostart, &quit_element])?;
 
     let _tray = TrayIconBuilder::new()
         .icon(app.default_window_icon().unwrap().clone())

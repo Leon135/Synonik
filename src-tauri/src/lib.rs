@@ -3,9 +3,11 @@ use diesel::sqlite::SqliteConnection;
 use std::sync::Mutex;
 use tauri::Manager;
 use tauri::WindowEvent;
+
 mod autostart;
 mod db;
 mod shortcut;
+mod store;
 mod tray;
 mod window;
 
@@ -14,12 +16,10 @@ pub struct DbState(pub Mutex<SqliteConnection>);
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .manage(shortcut::CurrentShortcut::new(Some(
-            "Control+F2".to_string(),
-        )))
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(autostart::autostart_plugin())
         .plugin(tauri_plugin_clipboard_manager::init())
-        .plugin(shortcut::shortcut_plugin())
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_sql::Builder::new().build())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_user_input::init())
@@ -27,6 +27,7 @@ pub fn run() {
             db::manager::search_synonyms,
             window::quit_app_command,
             shortcut::register_shortcut,
+            store::get_shortcut
         ])
         .setup(|app| {
             db::prepare_db(app)?;
@@ -37,7 +38,11 @@ pub fn run() {
                     .to_str()
                     .ok_or_else(|| "invalid database path".to_string())?,
             )?;
+
             app.manage(DbState(Mutex::new(conn)));
+
+            store::prepare_store(app)?;
+            shortcut::register_shortcut_on_start(app)?;
 
             let _ = tray::setup_tray(app);
 

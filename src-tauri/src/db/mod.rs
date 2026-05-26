@@ -1,5 +1,5 @@
 pub mod manager;
-mod schema;
 mod models;
+mod schema;
 
 pub use manager::prepare_db;

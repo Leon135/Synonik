@@ -1,9 +1,9 @@
 use std::sync::Mutex;
-use tauri::plugin::TauriPlugin;
 use tauri::Emitter;
 use tauri::Manager;
 use tauri_plugin_clipboard_manager::ClipboardExt;
-use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
+use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
+use tauri_plugin_store::StoreExt;
 use tauri_plugin_user_input::{EventType, UserInputExt};
 
 use crate::window::show_app;
@@ -52,18 +52,19 @@ fn handle_shortcut_action(app: &tauri::AppHandle) {
     let _ = app.emit_to("main", "shortcut-pressed-input", selected_text);
 }
 
-pub fn shortcut_plugin() -> TauriPlugin<tauri::Wry> {
-    let shortcut = Shortcut::new(Some(Modifiers::CONTROL), Code::F2);
+pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {  
+    let store = app.store("settings.json")?;  
+    let shortcut = store  
+        .get("shortcut")  
+        .and_then(|v| v.as_str().map(String::from))  
+        .unwrap_or_else(|| "Control+F2".to_string());  
+    app.manage(CurrentShortcut::new(Some(shortcut.clone())));  
 
-    tauri_plugin_global_shortcut::Builder::new()
-        .with_shortcut(shortcut)
-        .unwrap()
-        .with_handler(move |_app, _shortcut, event| {
-            if _shortcut == &shortcut && event.state() == ShortcutState::Pressed {
-                handle_shortcut_action(_app);
-            }
-        })
-        .build()
+    if let Err(e) = register_shortcut(app.handle().clone(), shortcut) {
+        eprintln!("[Synonik] Nie udało się zarejestrować skrótu przy starcie: {e}");
+    }
+
+    Ok(())  
 }
 
 #[tauri::command]
@@ -76,12 +77,19 @@ pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), 
         let _ = global_shortcut.unregister(prev);
     }
 
-    let _ = global_shortcut.on_shortcut(shortcut.as_str(), move |app, _shortcut, event| {
-        if event.state() == ShortcutState::Pressed {
-            handle_shortcut_action(app);
-        }
-    });
+    global_shortcut
+        .on_shortcut(shortcut.as_str(), move |app, _shortcut, event| {
+            if event.state() == ShortcutState::Pressed {
+                handle_shortcut_action(app);
+            }
+        })
+        .map_err(|e| format!("Nie udało się zarejestrować skrótu: {e}"))?;
 
-    *current = Some(shortcut);
+    *current = Some(shortcut.clone());
+
+    let store = app.store("settings.json").map_err(|e| e.to_string())?;
+    store.set("shortcut", shortcut);
+    store.save().map_err(|e| e.to_string())?;
+
     Ok(())
 }
