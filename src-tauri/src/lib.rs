@@ -14,6 +14,9 @@ pub struct DbState(pub Mutex<SqliteConnection>);
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .manage(shortcut::CurrentShortcut::new(Some(
+            "Control+F2".to_string(),
+        )))
         .plugin(autostart::autostart_plugin())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(shortcut::shortcut_plugin())
@@ -22,7 +25,8 @@ pub fn run() {
         .plugin(tauri_plugin_user_input::init())
         .invoke_handler(tauri::generate_handler![
             db::manager::search_synonyms,
-            window::quit_app_command
+            window::quit_app_command,
+            shortcut::register_shortcut,
         ])
         .setup(|app| {
             db::prepare_db(app)?;

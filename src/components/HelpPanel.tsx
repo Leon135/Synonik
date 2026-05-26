@@ -1,7 +1,25 @@
+import { invoke } from "@tauri-apps/api/core";
 import { useState } from "preact/hooks";
+import "../css/help-panel.css";
 
 export default function HelpPanel() {
   const [helpOpen, setHelpOpen] = useState(false);
+  const [keys, setKeys] = useState<string[]>([]);
+
+  function handleKeyDown(event: KeyboardEvent) {
+    setKeys((p) => {
+      const newKeys = [...p];
+      if (!newKeys.includes(event.key)) {
+        newKeys.push(event.key);
+      }
+      console.log(newKeys);
+      return newKeys;
+    });
+  }
+
+  function handleSave() {
+    invoke("register_shortcut", { shortcut: keys.join("+") });
+  }
 
   return (
     <div class="help-panel">
@@ -11,6 +29,54 @@ export default function HelpPanel() {
       </div>
       {helpOpen && (
         <div class="help-panel__body">
+          <form class="help-panel__shortcut-wrapper" onSubmit={(e) => {
+            e.preventDefault();
+            handleSave();
+          }}>
+            <div class="help-panel__shortcut-field">
+              <input
+                class="help-panel__shortcut-input"
+                type="text"
+                onKeyDown={handleKeyDown}
+                readOnly={true}
+                value={keys.join("+")}
+              />
+              {keys.length > 0 && (
+              <button
+                class="help-panel__shortcut-clear"
+                onClick={() => setKeys([])}
+                aria-label="Wyczyść"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-x"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M18 6l-12 12" />
+                  <path d="M6 6l12 12" />
+                </svg>
+              </button>
+              )}
+            </div>
+            <button
+              type="button"
+              disabled={keys.length === 0}
+              onClick={handleSave}
+              class="help-panel__shortcut-save"
+              aria-label="Zapisz skrót"
+            >
+              Zapisz
+            </button>
+          </form>
+
           <p>
             <strong>Synonik</strong> to podręczny i lekki słownik synonimów.
           </p>

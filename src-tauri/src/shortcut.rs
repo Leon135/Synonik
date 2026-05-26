@@ -1,10 +1,20 @@
+use std::sync::Mutex;
 use tauri::plugin::TauriPlugin;
 use tauri::Emitter;
+use tauri::Manager;
 use tauri_plugin_clipboard_manager::ClipboardExt;
-use tauri_plugin_global_shortcut::{Code, Modifiers, Shortcut, ShortcutState};
+use tauri_plugin_global_shortcut::{Code, GlobalShortcutExt, Modifiers, Shortcut, ShortcutState};
 use tauri_plugin_user_input::{EventType, UserInputExt};
 
 use crate::window::show_app;
+
+pub struct CurrentShortcut(Mutex<Option<String>>);
+
+impl CurrentShortcut {
+    pub fn new(shortcut: Option<String>) -> Self {
+        Self(Mutex::new(shortcut))
+    }
+}
 
 fn get_selected_text(app: &tauri::AppHandle) -> String {
     let user_input = app.user_input();
@@ -44,6 +54,7 @@ fn handle_shortcut_action(app: &tauri::AppHandle) {
 
 pub fn shortcut_plugin() -> TauriPlugin<tauri::Wry> {
     let shortcut = Shortcut::new(Some(Modifiers::CONTROL), Code::F2);
+
     tauri_plugin_global_shortcut::Builder::new()
         .with_shortcut(shortcut)
         .unwrap()
@@ -53,4 +64,24 @@ pub fn shortcut_plugin() -> TauriPlugin<tauri::Wry> {
             }
         })
         .build()
+}
+
+#[tauri::command]
+pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), String> {
+    let global_shortcut = app.global_shortcut();
+
+    let state = app.state::<CurrentShortcut>();
+    let mut current = state.0.lock().unwrap();
+    if let Some(prev) = current.as_deref() {
+        let _ = global_shortcut.unregister(prev);
+    }
+
+    let _ = global_shortcut.on_shortcut(shortcut.as_str(), move |app, _shortcut, event| {
+        if event.state() == ShortcutState::Pressed {
+            handle_shortcut_action(app);
+        }
+    });
+
+    *current = Some(shortcut);
+    Ok(())
 }
