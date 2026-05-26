@@ -2,6 +2,7 @@ import { useState } from "preact/hooks";
 
 export default function HelpContainer() {
   const [helpOpen, setHelpOpen] = useState(false);
+
   return (
     <div class="help-panel">
       <div class="help-panel-header" onClick={() => setHelpOpen((p) => !p)}>
