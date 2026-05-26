@@ -1,6 +1,6 @@
 import Titlebar from "./components/Titlebar";
 
-import HelpContainer from "./components/HelpContainer";
+import HelpPanel from "./components/HelpPanel";
 import SearchContainer from "./components/SearchContainer";
 import "./css/app.css";
 
@@ -12,7 +12,7 @@ function App() {
         <p class="main__description">
           Znajdź synonimy dla dowolnego polskiego słowa.
         </p>
-        <HelpContainer />
+        <HelpPanel />
         <SearchContainer />
       </main>
     </div>

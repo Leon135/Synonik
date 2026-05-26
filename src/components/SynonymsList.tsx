@@ -1,8 +1,8 @@
 import { useRef } from "preact/hooks";
-import "../css/synonyms-container.css";
+import "../css/synonyms-list.css";
 import { type SynonymGroup } from "../types/ResponseTypes";
 
-export default function SynonymsContainer({
+export default function SynonymsList({
   success,
   word,
   synonymGroups,
@@ -15,8 +15,8 @@ export default function SynonymsContainer({
 
   if (!success && synonymGroups.length === 0) {
     return (
-      <section class="results">
-        <p class="results__not-found">
+      <section class="synonyms-list">
+        <p class="synonyms-list__not-found">
           Nie znaleziono synonimów dla słowa <strong>"{word}"</strong>.
         </p>
       </section>
@@ -43,8 +43,8 @@ export default function SynonymsContainer({
   }
 
   return (
-    <section ref={containerRef} class="results" onKeyDown={handleKeyDown}>
-      <h2 class="results__heading">
+    <section ref={containerRef} class="synonyms-list" onKeyDown={handleKeyDown}>
+      <h2 class="synonyms-list__heading">
         Synonimy dla słowa <strong>{word}</strong>:
       </h2>
       {synonymGroups.map((group) => (

@@ -1,4 +1,4 @@
-.error-container {
+.error-message {
   margin-top: var(--size-5);
   background: var(--error-bg);
   border: 1px solid var(--error-border);
@@ -7,14 +7,14 @@
   margin-bottom: var(--size-5);
 }
 
-.error-container h4 {
+.error-message h4 {
   margin: 0 0 var(--size-1);
   color: var(--error);
   font-size: var(--font-size--1);
   font-weight: 600;
 }
 
-.error-container p {
+.error-message p {
   margin: 0;
   color: #f1aeb5;
   font-size: var(--font-size--1);

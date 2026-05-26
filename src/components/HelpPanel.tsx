@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 
-export default function HelpContainer() {
+export default function HelpPanel() {
   const [helpOpen, setHelpOpen] = useState(false);
 
   return (

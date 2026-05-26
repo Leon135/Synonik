@@ -1,7 +1,7 @@
 import useSearch from "../hooks/useSearch";
 import useShortcuts from "../hooks/useShortcuts";
-import ErrorContainer from "./ErrorContainer";
-import SynonymsContainer from "./SynonymsContainer";
+import ErrorMessage from "./ErrorMessage";
+import SynonymsList from "./SynonymsList";
 
 export default function SearchContainer() {
   const search = useSearch();
@@ -105,13 +105,13 @@ export default function SearchContainer() {
       </form>
 
       {search.showSynonyms && !search.isLoading && (
-        <SynonymsContainer
+        <SynonymsList
           success={search.success}
           word={search.wordInput.trim()}
           synonymGroups={search.synonymGroups}
         />
       )}
-      {search.error.length > 0 && <ErrorContainer error={search.error} />}
+      {search.error.length > 0 && <ErrorMessage error={search.error} />}
     </>
   );
 }
