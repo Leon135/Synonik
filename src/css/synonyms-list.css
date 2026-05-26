@@ -1,8 +1,8 @@
-.synonyms-list {
+.syn-list {
   margin-top: var(--size-6);
 }
 
-.synonyms-list__heading {
+.syn-list__heading {
   font-size: var(--font-size--2);
   font-weight: 400;
   color: var(--text-2);
@@ -10,20 +10,20 @@
   margin-top: 0;
 }
 
-.synonyms-list__heading strong {
+.syn-list__heading strong {
   color: var(--text-1);
 }
 
-.synonyms-list__not-found {
+.syn-list__not-found {
   font-size: var(--font-size--2);
   color: var(--text-2);
 }
 
-.synonyms-list__not-found strong {
+.syn-list__not-found strong {
   color: var(--text-1);
 }
 
-.card {
+.syn-card {
   background: var(--surface-2);
   border: 1px solid var(--surface-4);
   border-radius: var(--radius-2);
@@ -31,7 +31,7 @@
   margin-bottom: var(--size-2);
 }
 
-.card__title {
+.syn-card__title {
   font-size: var(--font-size--2);
   font-weight: 600;
   text-transform: uppercase;
@@ -40,7 +40,7 @@
   margin: 0 0 var(--size-1) 0;
 }
 
-.card__synonyms {
+.syn-card__synonyms {
   font-size: var(--font-size--1);
   line-height: 1.5;
   color: var(--brand);

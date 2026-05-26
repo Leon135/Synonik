@@ -6,10 +6,10 @@ import "./css/app.css";
 
 function App() {
   return (
-    <div class="app">
+    <div class="syn-app">
       <Titlebar />
-      <main class="main">
-        <p class="main__description">
+      <main class="syn-main">
+        <p class="syn-main__description">
           Znajdź synonimy dla dowolnego polskiego słowa.
         </p>
         <HelpPanel />

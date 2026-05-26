@@ -15,8 +15,8 @@ export default function SynonymsList({
 
   if (!success && synonymGroups.length === 0) {
     return (
-      <section class="synonyms-list">
-        <p class="synonyms-list__not-found">
+      <section class="syn-list">
+        <p class="syn-list__not-found">
           Nie znaleziono synonimów dla słowa <strong>"{word}"</strong>.
         </p>
       </section>
@@ -24,7 +24,7 @@ export default function SynonymsList({
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    const cards = containerRef.current?.querySelectorAll<HTMLElement>(".card");
+    const cards = containerRef.current?.querySelectorAll<HTMLElement>(".syn-card");
     if (!cards?.length) return;
 
     const current = Array.from(cards).indexOf(
@@ -43,14 +43,14 @@ export default function SynonymsList({
   }
 
   return (
-    <section ref={containerRef} class="synonyms-list" onKeyDown={handleKeyDown}>
-      <h2 class="synonyms-list__heading">
+    <section ref={containerRef} class="syn-list" onKeyDown={handleKeyDown}>
+      <h2 class="syn-list__heading">
         Synonimy dla słowa <strong>{word}</strong>:
       </h2>
       {synonymGroups.map((group) => (
-        <article tabIndex={0} class="card" key={group.group_meaning}>
-          <h3 class="card__title">{group.group_meaning}</h3>
-          <p class="card__synonyms">
+        <article tabIndex={0} class="syn-card" key={group.group_meaning}>
+          <h3 class="syn-card__title">{group.group_meaning}</h3>
+          <p class="syn-card__synonyms">
             {(group.synonyms as string[]).join(", ")}
           </p>
         </article>

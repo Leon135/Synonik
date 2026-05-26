@@ -1,4 +1,4 @@
-.header {
+.syn-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,29 +12,29 @@
   z-index: 10;
 }
 
-.header__title-container {
+.syn-header__title-container {
   display: flex;
   align-items: center;
   gap: var(--size-2);
 }
 
-.header__icon {
+.syn-header__icon {
   inline-size: var(--size-6);
   color: var(--brand);
 }
 
-.header__title {
+.syn-header__title {
   font-size: var(--font-size--1);
   font-weight: 600;
   color: var(--text-1);
 }
 
-.header__window-controls {
+.syn-header__win-controls {
   display: flex;
   gap: var(--size-2);
 }
 
-.header__window-controls-button {
+.syn-header__win-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -45,7 +45,7 @@
   border-radius: var(--radius-2);
 }
 
-.header__window-controls-button:hover {
+.syn-header__win-btn:hover {
   color: var(--text-1);
   animation: window-controls-animation 0.15s forwards;
 }

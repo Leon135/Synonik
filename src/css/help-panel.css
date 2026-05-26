@@ -1,4 +1,4 @@
-.help-panel {
+.syn-help {
   background: var(--surface-2);
   border: 1px solid var(--surface-4);
   border-radius: var(--radius-2);
@@ -6,80 +6,19 @@
   overflow: hidden;
 }
 
-.help-panel__shortcut-wrapper {
+.syn-help__shortcut-wrapper {
   display: flex;
   gap: var(--size-2);
   align-items: center;
   margin-bottom: var(--size-3);
 }
 
-.help-panel__shortcut-field {
+.syn-help__shortcut-field {
   position: relative;
   flex: 1;
 }
 
-.help-panel__shortcut-save {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-2);
-  padding: var(--size-2) var(--size-4);
-  font-size: var(--font-size--1);
-  font-weight: 600;
-  background: var(--brand);
-  color: white;
-  border: none;
-  border-radius: var(--radius-2);
-  cursor: pointer;
-  transition: background 0.25s;
-  white-space: nowrap;
-}
-
-.help-panel__shortcut-save:hover:not(:disabled) {
-  background: var(--brand-hover);
-}
-
-.help-panel__shortcut-save:disabled {
-  background: var(--gray-7);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.help-panel__shortcut-input {
-  width: 100%;
-  padding: var(--size-2) var(--size-3);
-  font-size: var(--font-size--1);
-  background: var(--surface-2);
-  color: var(--text-1);
-  border: 1px solid var(--surface-4);
-  border-radius: var(--radius-2);
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.15s;
-}
-
-.help-panel__shortcut-input:focus {
-  border-color: var(--brand);
-}
-
-.help-panel__shortcut-input:has(+ .help-panel__shortcut-clear) {
-  padding-right: var(--size-7);
-}
-
-.help-panel__shortcut-clear {
-  position: absolute;
-  right: var(--size-2);
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--size-1);
-  color: var(--text-2);
-  display: flex;
-  align-items: center;
-}
-
-.help-panel__header {
+.syn-help__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,11 +29,11 @@
   color: var(--text-1);
 }
 
-.help-panel__header:hover {
+.syn-help__header:hover {
   background: var(--surface-3);
 }
 
-.help-panel__body {
+.syn-help__body {
   padding: var(--size-3) var(--size-4) var(--size-4);
   border-top: 1px solid var(--surface-4);
   color: var(--text-2);
@@ -102,28 +41,28 @@
   line-height: 1.5;
 }
 
-.help-panel__body h4 {
+.syn-help__body h4 {
   margin: 0 0 var(--size-1);
   color: var(--text-1);
 }
 
-.help-panel__body ul {
+.syn-help__body ul {
   margin: 0;
   padding-left: var(--size-4);
 }
 
-.help-panel__body li {
+.syn-help__body li {
   margin-bottom: var(--size-1);
 }
 
-.help-panel__body kbd {
+.syn-help__body kbd {
   background: var(--surface-4);
   padding: 1px 5px;
   border-radius: 3px;
   font-size: 0.85em;
 }
 
-.help-panel__footer {
+.syn-help__footer {
   margin-top: var(--size-2);
   padding-top: var(--size-2);
   border-top: 1px solid var(--surface-4);

@@ -1,9 +1,9 @@
-import { getCurrentWindow, Window } from "@tauri-apps/api/window";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import "../css/titlebar.css";
 
 export default function Titlebar() {
   function handleWindowControl(action: string) {
-    const appWindow: Window = getCurrentWindow();
+    const appWindow = getCurrentWindow();
 
     switch (action) {
       case "minimize":
@@ -18,8 +18,8 @@ export default function Titlebar() {
 
   return (
     <>
-      <header data-tauri-drag-region="deep" class="header">
-        <section class="header__title-container">
+      <header data-tauri-drag-region="deep" class="syn-header">
+        <section class="syn-header__title-container">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -30,18 +30,18 @@ export default function Titlebar() {
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-book-2 header__icon"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-book-2 syn-header__icon"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M19 4v16h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12" />
             <path d="M19 16h-12a2 2 0 0 0 -2 2" />
             <path d="M9 8h6" />
           </svg>
-          <span class="header__title">Synonik</span>
+          <span class="syn-header__title">Synonik</span>
         </section>
-        <section class="header__window-controls">
+        <section class="syn-header__win-controls">
           <button
-            class="header__window-controls-button"
+            class="syn-header__win-btn"
             title="Zminimalizuj"
             aria-label="Zminimalizuj"
             onClick={() => handleWindowControl("minimize")}
@@ -63,7 +63,7 @@ export default function Titlebar() {
             </svg>
           </button>
           <button
-            class="header__window-controls-button"
+            class="syn-header__win-btn"
             title="Zamknij"
             aria-label="Zamknij"
             onClick={() => handleWindowControl("close")}

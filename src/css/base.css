@@ -8,6 +8,7 @@
   --surface-2: #000;
   --surface-3: #111;
   --surface-4: #4a4a4a;
+  --surface-disabled: #495057;
   --text-1: #ffffffd2;
   --text-2: #aaa;
   color-scheme: dark;
@@ -20,6 +21,7 @@
     --surface-2: #fff;
     --surface-3: #e9ecef;
     --surface-4: #dee2e6;
+    --surface-disabled: #adb5bd;
     --text-1: #212529;
     --text-2: #6c757d;
   }
@@ -35,6 +37,41 @@
   to {
     color: var(--brand);
   }
+}
+
+.syn-input {
+  width: 100%;
+  padding: var(--size-2) var(--size-3);
+  font-size: var(--font-size--1);
+  background: var(--surface-2);
+  color: var(--text-1);
+  border: 1px solid var(--surface-4);
+  border-radius: var(--radius-2);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.syn-input:focus {
+  border-color: var(--brand);
+}
+
+.syn-input:has(+ .syn-input-clear) {
+  padding-right: var(--size-7);
+}
+
+.syn-input-clear {
+  position: absolute;
+  right: var(--size-2);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--size-1);
+  color: var(--text-2);
+  display: flex;
+  align-items: center;
 }
 
 body {

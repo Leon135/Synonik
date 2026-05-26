@@ -1,4 +1,5 @@
 import "../css/search-container.css";
+import "../css/btn.css";
 import useSearch from "../hooks/useSearch";
 import useShortcuts from "../hooks/useShortcuts";
 import ErrorMessage from "./ErrorMessage";
@@ -15,22 +16,22 @@ export default function SearchContainer() {
   function onKeyDown(e: any) {
     if (e.key === "Enter") search.get_synonyms(search.wordInput);
     if (e.key === "ArrowRight")
-      (document.querySelector(".card") as HTMLElement)?.focus();
+      (document.querySelector(".syn-card") as HTMLElement)?.focus();
   }
 
   return (
     <>
       <form
-        class="search"
+        class="syn-search"
         onSubmit={(e) => {
           e.preventDefault();
           search.get_synonyms(search.wordInput);
         }}
       >
-        <div class="search__input-wrapper">
+        <div class="syn-search__input-wrapper">
           <input
             ref={search.inputRef}
-            class="search__input"
+            class="syn-input"
             placeholder="Wpisz słowo..."
             value={search.wordInput}
             onInput={search.onInputChange}
@@ -39,7 +40,7 @@ export default function SearchContainer() {
           {search.wordInput && (
             <button
               type="button"
-              class="search__clear"
+              class="syn-input-clear"
               onClick={search.onClear}
               aria-label="Wyczyść"
             >
@@ -64,7 +65,7 @@ export default function SearchContainer() {
         </div>
         <button
           type="submit"
-          class="button"
+          class="syn-btn"
           disabled={!search.wordInput.trim() || search.isLoading}
         >
           {search.isLoading ? (
@@ -78,7 +79,7 @@ export default function SearchContainer() {
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 button__icon button__icon--spin"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-loader-2 syn-btn__icon syn-btn__icon--spin"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M12 3a9 9 0 1 0 9 9" />
@@ -94,7 +95,7 @@ export default function SearchContainer() {
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="icon icon-tabler icons-tabler-outline icon-tabler-search button__icon"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-search syn-btn__icon"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
               <path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />

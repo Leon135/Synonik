@@ -1,3 +1,5 @@
+- Własny skrót otwarcia programu (personalizacja - ctrl+f2)
+
 - Znaczenia grup synonimów na bazie bielika?
 - Dodawanie własnych synonimów, grup, znaczeń
 - Usuwanie synonimów

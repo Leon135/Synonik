@@ -1,15 +1,15 @@
-.app {
+.syn-app {
   display: flex;
   flex-direction: column;
   background: var(--surface-1);
 }
 
-.main {
+.syn-main {
   padding: var(--size-6);
   max-width: 680px;
 }
 
-.main__description {
+.syn-main__description {
   margin-top: 0;
   margin-bottom: var(--size-5);
   font-size: var(--font-size--2);
@@ -17,7 +17,7 @@
 }
 
 @media (max-width: 500px) {
-  .main {
+  .syn-main {
     padding: var(--size-4);
   }
 }

@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useState } from "preact/hooks";
 import "../css/help-panel.css";
+import "../css/btn.css";
 
 export default function HelpPanel() {
   const [helpOpen, setHelpOpen] = useState(false);
@@ -12,7 +13,6 @@ export default function HelpPanel() {
       if (!newKeys.includes(event.key)) {
         newKeys.push(event.key);
       }
-      console.log(newKeys);
       return newKeys;
     });
   }
@@ -22,20 +22,20 @@ export default function HelpPanel() {
   }
 
   return (
-    <div class="help-panel">
-      <div class="help-panel__header" onClick={() => setHelpOpen((p) => !p)}>
+    <div class="syn-help">
+      <div class="syn-help__header" onClick={() => setHelpOpen((p) => !p)}>
         <span>O programie</span>
         <span>{helpOpen ? "▴" : "▾"}</span>
       </div>
       {helpOpen && (
-        <div class="help-panel__body">
-          <form class="help-panel__shortcut-wrapper" onSubmit={(e) => {
+        <div class="syn-help__body">
+          <form class="syn-help__shortcut-wrapper" onSubmit={(e) => {
             e.preventDefault();
             handleSave();
           }}>
-            <div class="help-panel__shortcut-field">
+            <div class="syn-help__shortcut-field">
               <input
-                class="help-panel__shortcut-input"
+                class="syn-input"
                 type="text"
                 onKeyDown={handleKeyDown}
                 readOnly={true}
@@ -43,7 +43,7 @@ export default function HelpPanel() {
               />
               {keys.length > 0 && (
               <button
-                class="help-panel__shortcut-clear"
+                class="syn-input-clear"
                 onClick={() => setKeys([])}
                 aria-label="Wyczyść"
               >
@@ -70,7 +70,7 @@ export default function HelpPanel() {
               type="button"
               disabled={keys.length === 0}
               onClick={handleSave}
-              class="help-panel__shortcut-save"
+              class="syn-btn"
               aria-label="Zapisz skrót"
             >
               Zapisz
@@ -88,7 +88,7 @@ export default function HelpPanel() {
             </li>
             <li>Możesz też wpisać słowo ręcznie w pole wyszukiwania</li>
           </ul>
-          <p class="help-panel__footer">Wersja beta @Leon135</p>
+          <p class="syn-help__footer">Wersja beta @Leon135</p>
         </div>
       )}
     </div>
