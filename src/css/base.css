@@ -16,12 +16,12 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --surface-1: #000;
-    --surface-2: #000;
-    --surface-3: #111;
-    --surface-4: #fff;
-    --text-1: #fff;
-    --text-2: #aaa;
+    --surface-1: #f8f9fa;
+    --surface-2: #fff;
+    --surface-3: #e9ecef;
+    --surface-4: #dee2e6;
+    --text-1: #212529;
+    --text-2: #6c757d;
   }
 }
 

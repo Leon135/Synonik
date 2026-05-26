@@ -1,5 +1,6 @@
 import { getCurrentWindow, Window } from "@tauri-apps/api/window";
 import "../css/titlebar.css";
+
 export default function Titlebar() {
   function handleWindowControl(action: string) {
     const appWindow: Window = getCurrentWindow();

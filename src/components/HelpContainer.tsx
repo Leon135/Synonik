@@ -5,12 +5,12 @@ export default function HelpContainer() {
 
   return (
     <div class="help-panel">
-      <div class="help-panel-header" onClick={() => setHelpOpen((p) => !p)}>
+      <div class="help-panel__header" onClick={() => setHelpOpen((p) => !p)}>
         <span>O programie</span>
         <span>{helpOpen ? "▴" : "▾"}</span>
       </div>
       {helpOpen && (
-        <div class="help-panel-body">
+        <div class="help-panel__body">
           <p>
             <strong>Synonik</strong> to podręczny i lekki słownik synonimów.
           </p>
@@ -22,7 +22,7 @@ export default function HelpContainer() {
             </li>
             <li>Możesz też wpisać słowo ręcznie w pole wyszukiwania</li>
           </ul>
-          <p class="help-panel-footer">Wersja beta @Leon135</p>
+          <p class="help-panel__footer">Wersja beta @Leon135</p>
         </div>
       )}
     </div>
