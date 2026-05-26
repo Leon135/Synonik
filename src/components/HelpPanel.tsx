@@ -105,7 +105,6 @@ export default function HelpPanel() {
             >
               {saving ? "Zapisywanie..." : "Zapisz"}
             </button>
-            {feedback && <span class="syn-help__feedback">{feedback}</span>}
           </form>
 
           <p>
@@ -114,7 +113,7 @@ export default function HelpPanel() {
           <h4>Jak używać?</h4>
           <ul>
             <li>
-              Naciśnij <kbd>Ctrl+F2</kbd> - program przechwyci zaznaczony tekst
+              Naciśnij <kbd>Ctrl+F2</kbd> — program przechwyci zaznaczony tekst
               i wyszuka synonimy
             </li>
             <li>Możesz też wpisać słowo ręcznie w pole wyszukiwania</li>
