@@ -1,123 +1,45 @@
-import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
-import { useEffect, useRef, useState } from "preact/hooks";
-import { useHotkeys } from "react-hotkeys-hook";
-import { SynonymGroup } from "../types/ResponseTypes";
+import useSearch from "../hooks/useSearch";
+import useShortcuts from "../hooks/useShortcuts";
 import ErrorContainer from "./ErrorContainer";
 import SynonymsContainer from "./SynonymsContainer";
 
 export default function SearchContainer() {
-  const [wordInput, setWordInput] = useState("");
-  const [synonymGroups, setSynonymGroups] = useState<SynonymGroup[]>([]);
-  const [success, setSuccess] = useState(false);
-  const [showSynonyms, setShowSynonyms] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const search = useSearch();
 
-  useEffect(() => {
-    let unlisten: (() => void) | undefined;
-
-    async function init() {
-      unlisten = await listen("shortcut-pressed-input", (event) => {
-        setWordInput(event.payload as string);
-        get_synonyms(event.payload as string);
-      });
-    }
-
-    init();
-    return () => {
-      unlisten?.();
-    };
-  }, []);
-
-  useHotkeys(
-    ["ctrl+l", "/"],
-    () => {
-      inputRef.current?.focus();
-    },
-    { preventDefault: true, useKey: true },
+  useShortcuts(
+    { setWordInput: search.setWordInput, get_synonyms: search.get_synonyms },
+    search.inputRef,
   );
 
-  async function get_synonyms(word: string) {
-    if (!word.trim()) return;
-    setIsLoading(true);
-
-    invoke<[string, string][]>("search_synonyms", {
-      word: word.trim().toLowerCase(),
-    })
-      .then((response) => {
-        const groups = new Map<string, SynonymGroup>();
-
-        for (let [word, group_meaning] of response) {
-          if (!groups.has(group_meaning)) {
-            groups.set(group_meaning, {
-              group_meaning: group_meaning,
-              synonyms: [],
-            });
-          }
-          groups.get(group_meaning)?.synonyms.push(word);
-        }
-
-        const result = Array.from(groups.values());
-        return result;
-      })
-      .then((result) => {
-        setError("");
-        setSuccess(result.length > 0);
-        setShowSynonyms(true);
-        setSynonymGroups(result);
-      })
-      .catch((error) => {
-        setError(error);
-        setSuccess(false);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
-
-  function onInputChange(e: any) {
-    setWordInput(e.currentTarget.value);
-    if (showSynonyms) {
-      setSynonymGroups([]);
-      setShowSynonyms(false);
-    }
-  }
   function onKeyDown(e: any) {
-    if (e.key === "Enter") get_synonyms(wordInput);
+    if (e.key === "Enter") search.get_synonyms(search.wordInput);
     if (e.key === "ArrowRight")
       (document.querySelector(".card") as HTMLElement)?.focus();
   }
 
-  function onClear() {
-    setWordInput("");
-    setSynonymGroups([]);
-    setShowSynonyms(false);
-  }
   return (
     <>
       <form
         class="search"
         onSubmit={(e) => {
           e.preventDefault();
-          get_synonyms(wordInput);
+          search.get_synonyms(search.wordInput);
         }}
       >
         <div class="search__input-wrapper">
           <input
-            ref={inputRef}
+            ref={search.inputRef}
             class="search__input"
             placeholder="Wpisz słowo..."
-            value={wordInput}
-            onInput={onInputChange}
+            value={search.wordInput}
+            onInput={search.onInputChange}
             onKeyDown={onKeyDown}
           />
-          {wordInput && (
+          {search.wordInput && (
             <button
               type="button"
               class="search__clear"
-              onClick={onClear}
+              onClick={search.onClear}
               aria-label="Wyczyść"
             >
               <svg
@@ -142,9 +64,9 @@ export default function SearchContainer() {
         <button
           type="submit"
           class="button"
-          disabled={!wordInput.trim() || isLoading}
+          disabled={!search.wordInput.trim() || search.isLoading}
         >
-          {isLoading ? (
+          {search.isLoading ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -182,14 +104,14 @@ export default function SearchContainer() {
         </button>
       </form>
 
-      {showSynonyms && !isLoading && (
+      {search.showSynonyms && !search.isLoading && (
         <SynonymsContainer
-          success={success}
-          word={wordInput.trim()}
-          synonymGroups={synonymGroups}
+          success={search.success}
+          word={search.wordInput.trim()}
+          synonymGroups={search.synonymGroups}
         />
       )}
-      {error.length > 0 && <ErrorContainer error={error} />}
+      {search.error.length > 0 && <ErrorContainer error={search.error} />}
     </>
   );
 }
