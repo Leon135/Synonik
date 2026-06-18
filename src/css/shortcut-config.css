@@ -1,0 +1,38 @@
+.syn-shortcut {
+  background: var(--surface-2);
+  border: 1px solid var(--surface-4);
+  border-radius: var(--radius-2);
+  margin-bottom: var(--size-5);
+  padding: var(--size-3) var(--size-4);
+}
+
+.syn-shortcut__header {
+  font-size: var(--font-size--2);
+  font-weight: 600;
+  color: var(--text-1);
+  margin-bottom: var(--size-2);
+}
+
+.syn-shortcut__body {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+}
+
+.syn-shortcut__field {
+  position: relative;
+  flex: 1;
+}
+
+.syn-shortcut__action {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+}
+
+@media (max-width: 500px) {
+  .syn-shortcut__body {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
