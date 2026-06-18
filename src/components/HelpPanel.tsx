@@ -50,9 +50,11 @@ export default function HelpPanel() {
 
   return (
     <div class="syn-help">
-      <button
-        type="button"
+      {/* biome-ignore lint/a11y/useSemanticElements: div needed to avoid default button styles */}
+      <div
         class="syn-help__header"
+        role="button"
+        tabIndex={0}
         onClick={() => setHelpOpen((p) => !p)}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -63,7 +65,7 @@ export default function HelpPanel() {
       >
         <span>O programie</span>
         <span>{helpOpen ? "▴" : "▾"}</span>
-      </button>
+      </div>
       {helpOpen && (
         <div class="syn-help__body">
           <form

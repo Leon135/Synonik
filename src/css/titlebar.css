@@ -19,8 +19,9 @@
 }
 
 .syn-header__icon {
-  inline-size: var(--size-6);
-  color: var(--brand);
+  width: var(--size-4);
+  height: var(--size-4);
+  object-fit: contain;
 }
 
 .syn-header__title {
