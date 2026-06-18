@@ -10,12 +10,17 @@
   border: none;
   border-radius: var(--radius-2);
   cursor: pointer;
-  transition: background 0.25s;
+  transition:
+    background 0.25s,
+    background-image 0.25s;
   white-space: nowrap;
 }
 
 .syn-btn:hover:not(:disabled) {
-  background: var(--brand-hover);
+  background-image: linear-gradient(
+    rgba(255 255 255 / 0.15),
+    rgba(255 255 255 / 0.15)
+  );
 }
 
 .syn-btn:disabled {

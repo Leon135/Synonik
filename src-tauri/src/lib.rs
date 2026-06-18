@@ -4,6 +4,7 @@ use std::sync::Mutex;
 use tauri::Manager;
 use tauri::WindowEvent;
 
+mod accent;
 mod autostart;
 mod db;
 mod shortcut;
@@ -27,7 +28,8 @@ pub fn run() {
             db::manager::search_synonyms,
             window::quit_app_command,
             shortcut::register_shortcut,
-            store::get_shortcut
+            store::get_shortcut,
+            accent::get_accent_color
         ])
         .setup(|app| {
             db::prepare_db(app)?;

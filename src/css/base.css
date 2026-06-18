@@ -1,4 +1,5 @@
-:root {
+:root,
+html[data-theme="dark"] {
   --brand: #a94dc1;
   --brand-hover: #ce5fea;
   --error: #dc3545;
@@ -15,16 +16,21 @@
   font-size: 18px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --surface-1: #f8f9fa;
-    --surface-2: #fff;
-    --surface-3: #e9ecef;
-    --surface-4: #dee2e6;
-    --surface-disabled: #adb5bd;
-    --text-1: #212529;
-    --text-2: #6c757d;
-  }
+html[data-theme="light"] {
+  --brand: #a94dc1;
+  --brand-hover: #ce5fea;
+  --error: #dc3545;
+  --error-bg: #f8d7da;
+  --error-border: #f5c2c7;
+  --surface-1: #f8f9fa;
+  --surface-2: #fff;
+  --surface-3: #e9ecef;
+  --surface-4: #dee2e6;
+  --surface-disabled: #adb5bd;
+  --text-1: #212529;
+  --text-2: #6c757d;
+  color-scheme: light;
+  font-size: 18px;
 }
 
 @keyframes spin {
