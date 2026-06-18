@@ -20,7 +20,7 @@ pub fn run() {
         .plugin(autostart::autostart_plugin())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
-        .plugin(tauri_plugin_sql::Builder::new().build())
+
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_user_input::init())
         .invoke_handler(tauri::generate_handler![
@@ -44,14 +44,16 @@ pub fn run() {
             store::prepare_store(app)?;
             shortcut::register_shortcut_on_start(app)?;
 
-            let _ = tray::setup_tray(app);
+            if let Err(e) = tray::setup_tray(app) {
+                eprintln!("[Synonik] Nie udało się utworzyć ikony w zasobniku: {e}");
+            }
 
             Ok(())
         })
         .on_window_event(|window, event| {
             if let WindowEvent::CloseRequested { api, .. } = event {
                 api.prevent_close();
-                window.hide().unwrap();
+                let _ = window.hide();
             }
         })
         .run(tauri::generate_context!())
