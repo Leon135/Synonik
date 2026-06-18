@@ -29,6 +29,7 @@ pub struct WordInGroup {
 
 #[derive(Queryable, Debug)]
 #[diesel(table_name = words)]
+#[allow(dead_code)]
 pub struct Word {
     pub id: i32,
     pub word: String,

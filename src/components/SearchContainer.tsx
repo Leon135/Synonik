@@ -13,7 +13,7 @@ export default function SearchContainer() {
     search.inputRef,
   );
 
-  function onKeyDown(e: any) {
+  function onKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter") search.get_synonyms(search.wordInput);
     if (e.key === "ArrowRight")
       (document.querySelector(".syn-card") as HTMLElement)?.focus();

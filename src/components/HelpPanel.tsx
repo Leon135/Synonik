@@ -10,8 +10,8 @@ export default function HelpPanel() {
   const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
-    invoke("get_shortcut")
-      .then((shortcut: any) => {
+    invoke<string>("get_shortcut")
+      .then((shortcut) => {
         setKeys(shortcut.split("+"));
       })
       .catch(() => {
@@ -105,6 +105,7 @@ export default function HelpPanel() {
             >
               {saving ? "Zapisywanie..." : "Zapisz"}
             </button>
+            {feedback && <span class="syn-help__feedback">{feedback}</span>}
           </form>
 
           <p>

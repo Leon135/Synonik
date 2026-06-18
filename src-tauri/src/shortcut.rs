@@ -16,12 +16,19 @@ impl CurrentShortcut {
     }
 }
 
+fn read_clipboard(app: &tauri::AppHandle) -> String {
+    app.clipboard().read_text().unwrap_or_else(|e| {
+        eprintln!("[Synonik] Nie udało się odczytać schowka: {e}");
+        String::new()
+    })
+}
+
 fn get_selected_text(app: &tauri::AppHandle) -> String {
     let user_input = app.user_input();
 
-    let previous_clipboard = app.clipboard().read_text().unwrap_or_default();
+    let previous_clipboard = read_clipboard(app);
 
-    let mut new_clipboard = app.clipboard().read_text().unwrap_or_default();
+    let mut new_clipboard = read_clipboard(app);
     let mut wait_time = 50;
     let mut attempts = 0;
 
@@ -34,11 +41,12 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
 
         std::thread::sleep(std::time::Duration::from_millis(wait_time));
 
-        new_clipboard = app.clipboard().read_text().unwrap_or_default();
+        new_clipboard = read_clipboard(app);
         wait_time *= 2;
     }
 
     if new_clipboard == previous_clipboard || new_clipboard.is_empty() {
+        app.clipboard().write_text(previous_clipboard).ok();
         return String::new();
     }
 
@@ -47,9 +55,12 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
 }
 
 fn handle_shortcut_action(app: &tauri::AppHandle) {
-    let selected_text = get_selected_text(app);
-    show_app(app);
-    let _ = app.emit_to("main", "shortcut-pressed-input", selected_text);
+    let app = app.clone();
+    std::thread::spawn(move || {
+        let selected_text = get_selected_text(&app);
+        show_app(&app);
+        let _ = app.emit_to("main", "shortcut-pressed-input", selected_text);
+    });
 }
 
 pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {  
@@ -69,10 +80,15 @@ pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::e
 
 #[tauri::command]
 pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), String> {
+    // Persist to store first, so a failed save doesn't leave stale state
+    let store = app.store("settings.json").map_err(|e| e.to_string())?;
+    store.set("shortcut", shortcut.as_str());
+    store.save().map_err(|e| e.to_string())?;
+
     let global_shortcut = app.global_shortcut();
 
     let state = app.state::<CurrentShortcut>();
-    let mut current = state.0.lock().unwrap();
+    let mut current = state.0.lock().map_err(|e| format!("Nie udało się uzyskać dostępu do stanu skrótu: {e}"))?;
     if let Some(prev) = current.as_deref() {
         let _ = global_shortcut.unregister(prev);
     }
@@ -86,10 +102,6 @@ pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), 
         .map_err(|e| format!("Nie udało się zarejestrować skrótu: {e}"))?;
 
     *current = Some(shortcut.clone());
-
-    let store = app.store("settings.json").map_err(|e| e.to_string())?;
-    store.set("shortcut", shortcut);
-    store.save().map_err(|e| e.to_string())?;
 
     Ok(())
 }

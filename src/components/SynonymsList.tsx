@@ -47,11 +47,11 @@ export default function SynonymsList({
       <h2 class="syn-list__heading">
         Synonimy dla słowa <strong>{word}</strong>:
       </h2>
-      {synonymGroups.map((group) => (
-        <article tabIndex={0} class="syn-card" key={group.group_meaning}>
+      {synonymGroups.map((group, index) => (
+        <article tabIndex={0} class="syn-card" key={index}>
           <h3 class="syn-card__title">{group.group_meaning}</h3>
           <p class="syn-card__synonyms">
-            {(group.synonyms as string[]).join(", ")}
+            {group.synonyms.join(", ")}
           </p>
         </article>
       ))}

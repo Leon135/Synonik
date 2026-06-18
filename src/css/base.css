@@ -33,12 +33,6 @@
   }
 }
 
-@keyframes window-controls-animation {
-  to {
-    color: var(--brand);
-  }
-}
-
 .syn-input {
   width: 100%;
   padding: var(--size-2) var(--size-3);
@@ -76,4 +70,21 @@
 
 body {
   margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand);
 }

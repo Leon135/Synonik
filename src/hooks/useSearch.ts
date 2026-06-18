@@ -37,8 +37,9 @@ export default function useSearch() {
       });
   }
 
-  function onInputChange(e: any) {
-    setWordInput(e.currentTarget.value);
+  function onInputChange(e: Event) {
+    const target = e.currentTarget as HTMLInputElement;
+    setWordInput(target.value);
     if (showSynonyms) {
       setSynonymGroups([]);
       setShowSynonyms(false);

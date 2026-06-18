@@ -21,8 +21,12 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
     let quit_element = MenuItem::with_id(app, "quit", "Wyjdź", true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&show_element, &*autostart, &quit_element])?;
 
+    let Some(default_icon) = app.default_window_icon().cloned() else {
+        eprintln!("[Synonik] Nie znaleziono domyślnej ikony");
+        return Ok(());
+    };
     let _tray = TrayIconBuilder::new()
-        .icon(app.default_window_icon().unwrap().clone())
+        .icon(default_icon)
         .menu(&menu)
         .show_menu_on_left_click(false)
         .on_menu_event(

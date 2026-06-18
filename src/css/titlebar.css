@@ -46,6 +46,5 @@
 }
 
 .syn-header__win-btn:hover {
-  color: var(--text-1);
-  animation: window-controls-animation 0.15s forwards;
+  color: var(--brand);
 }
