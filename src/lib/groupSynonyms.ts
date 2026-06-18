@@ -1,9 +1,11 @@
-import { SynonymGroup } from "../types/ResponseTypes";
+import type { SynonymGroup } from "../types/ResponseTypes";
 
-export default function groupSynonyms(response: [string, string][]): SynonymGroup[] {
+export default function groupSynonyms(
+  response: [string, string][],
+): SynonymGroup[] {
   const groups = new Map<string, SynonymGroup>();
 
-  for (let [word, group_meaning] of response) {
+  for (const [word, group_meaning] of response) {
     if (!groups.has(group_meaning)) {
       groups.set(group_meaning, {
         group_meaning: group_meaning,

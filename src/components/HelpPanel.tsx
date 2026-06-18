@@ -50,10 +50,20 @@ export default function HelpPanel() {
 
   return (
     <div class="syn-help">
-      <div class="syn-help__header" onClick={() => setHelpOpen((p) => !p)}>
+      <button
+        type="button"
+        class="syn-help__header"
+        onClick={() => setHelpOpen((p) => !p)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setHelpOpen((p) => !p);
+          }
+        }}
+      >
         <span>O programie</span>
         <span>{helpOpen ? "▴" : "▾"}</span>
-      </div>
+      </button>
       {helpOpen && (
         <div class="syn-help__body">
           <form
@@ -73,11 +83,13 @@ export default function HelpPanel() {
               />
               {keys.length > 0 && (
                 <button
+                  type="button"
                   class="syn-input-clear"
                   onClick={handleClear}
                   aria-label="Wyczyść"
                 >
                   <svg
+                    aria-hidden={true}
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"

@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useRef, useState } from "preact/hooks";
 import groupSynonyms from "../lib/groupSynonyms";
-import { SynonymGroup } from "../types/ResponseTypes";
+import type { SynonymGroup } from "../types/ResponseTypes";
 
 export default function useSearch() {
   const [wordInput, setWordInput] = useState("");
@@ -65,4 +65,4 @@ export default function useSearch() {
     onInputChange,
     onClear,
   };
-} 
+}

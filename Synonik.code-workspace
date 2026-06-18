@@ -1,10 +1,10 @@
 {
   "folders": [
     {
-      "path": ".",
+      "path": "."
     },
     {
-      "path": "../Synonik-db-builder",
-    },
-  ],
+      "path": "../Synonik-db-builder"
+    }
+  ]
 }

@@ -1,7 +1,6 @@
-import Titlebar from "./components/Titlebar";
-
 import HelpPanel from "./components/HelpPanel";
 import SearchContainer from "./components/SearchContainer";
+import Titlebar from "./components/Titlebar";
 import "./css/app.css";
 
 function App() {

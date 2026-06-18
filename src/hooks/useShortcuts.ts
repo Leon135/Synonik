@@ -2,11 +2,13 @@ import { listen } from "@tauri-apps/api/event";
 import { useEffect, useRef } from "preact/hooks";
 import { useHotkeys } from "react-hotkeys-hook";
 
-export default function useShortcuts(callbacks: {
-  setWordInput: (word: string) => void;
-  get_synonyms: (word: string) => void;
-}, inputRef: preact.RefObject<HTMLInputElement>) {
-
+export default function useShortcuts(
+  callbacks: {
+    setWordInput: (word: string) => void;
+    get_synonyms: (word: string) => void;
+  },
+  inputRef: preact.RefObject<HTMLInputElement>,
+) {
   const callbacksRef = useRef(callbacks);
 
   useEffect(() => {
@@ -30,7 +32,8 @@ export default function useShortcuts(callbacks: {
   }, []);
 
   useHotkeys(
-    ["ctrl+l", "/"], () => {
+    ["ctrl+l", "/"],
+    () => {
       inputRef.current?.focus();
     },
     { preventDefault: true, useKey: true },

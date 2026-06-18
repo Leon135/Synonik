@@ -45,6 +45,7 @@ export default function SearchContainer() {
               aria-label="Wyczyść"
             >
               <svg
+                aria-hidden={true}
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -70,6 +71,7 @@ export default function SearchContainer() {
         >
           {search.isLoading ? (
             <svg
+              aria-hidden={true}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
@@ -86,6 +88,7 @@ export default function SearchContainer() {
             </svg>
           ) : (
             <svg
+              aria-hidden={true}
               xmlns="http://www.w3.org/2000/svg"
               width="24"
               height="24"
