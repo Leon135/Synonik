@@ -21,11 +21,11 @@ Select a word, press a shortcut, and get synonyms instantly. Or search it in ui.
 
 Primary color is based on Windows accent color.
 
-![Dark theme about & settings](./screenshots/dark-about-settings.png)
+<img src="./screenshots/dark-about-settings.png" alt="Dark theme about & settings" width="500">
 
-![Dark theme search](./screenshots/dark-search.png)
+<img src="./screenshots/dark-search.png" alt="Dark theme search" width="500">
 
-![Light theme search](./screenshots/light-search.png)
+<img src="./screenshots/light-search.png" alt="Light theme search" width="500">
 
 ## Download
 
@@ -78,7 +78,7 @@ The installer will be in `src-tauri/target/release/bundle/`.
 | Command | Description |
 |---------|-------------|
 | `bun dev` | Start Vite dev server |
-| `bun build` | TypeScript + Vite build |
+| `bun run build` | TypeScript + Vite build |
 | `bun lint` | Biome check (format + lint) |
 | `bun lint:fix` | Biome auto-fix everything |
 | `bun tauri dev` | Run app in dev mode |
