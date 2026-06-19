@@ -35,4 +35,4 @@ writeFileSync(cargoPath, updated);
 console.log(`  Cargo.toml      -> ${version}`);
 
 console.log(`\nDone. Commit and push to release:\n`);
-console.log(`  git add -A && git commit -m "chore: bump to v${version}" && git push`);
+console.log(`  git add -A && git commit -m "chore: bump to v${version}" && git push origin master:release`);
