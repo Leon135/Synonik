@@ -56,6 +56,7 @@
   background: var(--surface-4);
   padding: var(--size-1);
   border-radius: var(--radius-1);
+  font-size: var(--font-size-0);
 }
 
 .syn-about__footer {
