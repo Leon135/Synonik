@@ -2,34 +2,10 @@
   margin-bottom: var(--size-5);
 }
 
-.syn-about__header {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-1);
-  cursor: pointer;
-  user-select: none;
-  font-size: var(--font-size-2);
-  color: var(--text-2);
-  padding: var(--size-1) 0;
-}
-
-.syn-about__header:hover {
-  color: var(--brand);
-}
-
-.syn-about__chevron {
-  font-size: 0.7em;
-}
-
 .syn-about__body {
-  margin-top: var(--size-2);
-  padding: var(--size-3) var(--size-4);
-  background: var(--surface-2);
-  border: 1px solid var(--surface-4);
-  border-radius: var(--radius-2);
   color: var(--text-2);
-  font-size: var(--font-size-2);
-  line-height: 1.6;
+  font-size: var(--font-size-1);
+  line-height: var(--font-lineheight-3);
 }
 
 .syn-about__body p {
@@ -39,7 +15,7 @@
 .syn-about__body h4 {
   margin: 0 0 var(--size-1);
   color: var(--text-1);
-  font-weight: 700;
+  font-weight: var(--font-weight-7);
   font-size: var(--font-size-1);
 }
 
@@ -50,21 +26,25 @@
 .syn-about__shortcuts {
   width: 100%;
   border-collapse: collapse;
-  font-size: inherit;
+  font-size: var(--font-size-1);
 }
 
 .syn-about__shortcuts th,
 .syn-about__shortcuts td {
   text-align: left;
-  padding: 3px 0;
+  padding: var(--size-1);
   vertical-align: middle;
 }
 
 .syn-about__shortcuts th {
-  font-weight: 700;
+  font-weight: var(--font-weight-7);
   color: var(--text-1);
   padding-bottom: var(--size-0);
   border-bottom: 1px solid var(--surface-4);
+}
+
+.syn-about__shortcuts tr {
+  line-height: var(--font-lineheight-5);
 }
 
 .syn-about__shortcuts td:first-child {
@@ -74,14 +54,13 @@
 
 .syn-about__body kbd {
   background: var(--surface-4);
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 0.85em;
+  padding: var(--size-1);
+  border-radius: var(--radius-1);
 }
 
 .syn-about__footer {
   margin-top: var(--size-2);
   padding-top: var(--size-2);
   border-top: 1px solid var(--surface-4);
-  font-size: var(--font-size-1);
+  font-size: var(--font-size-0);
 }

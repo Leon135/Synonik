@@ -2,52 +2,52 @@
   margin-bottom: var(--size-5);
 }
 
-.syn-settings__header {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-1);
-  cursor: pointer;
-  user-select: none;
-  font-size: var(--font-size-2);
-  color: var(--text-2);
-  padding: var(--size-1) 0;
-}
-
-.syn-settings__header:hover {
-  color: var(--brand);
-}
-
 .syn-settings__title {
-  margin: var(--size-2) 0;
+  margin: 0 0 var(--size-1);
   color: var(--text-1);
-  font-weight: 500;
+  font-weight: var(--font-weight-6);
   font-size: var(--font-size-1);
 }
 
-.syn-settings__slider {
-  width: 100%;
-  background: var(--gray-7);
-  opacity: 0.7;
-  transition: opacity 0.2s;
-  cursor: pointer;
-}
-
-.syn-settings__chevron {
-  font-size: 0.7em;
-}
-
-.syn-settings__body {
-  margin-top: var(--size-2);
-  padding: var(--size-3) var(--size-4);
-  background: var(--surface-2);
-  border: 1px solid var(--surface-4);
-  border-radius: var(--radius-2);
+.syn-settings__row + .syn-settings__title {
+  margin-top: var(--size-4);
 }
 
 .syn-settings__row {
   display: flex;
   align-items: center;
   gap: var(--size-2);
+}
+
+.syn-settings__row + .syn-settings__row {
+  margin-top: var(--size-3);
+}
+
+.syn-settings__scale-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-1);
+}
+
+.syn-btn--scale {
+  padding: var(--size-1) var(--size-2);
+  font-size: var(--font-size-0);
+  background: var(--surface-3);
+  color: var(--text-1);
+  margin: 0;
+}
+
+.syn-btn--scale:hover:not(:disabled) {
+  background: var(--surface-4);
+}
+
+.syn-btn--scale-active {
+  background: var(--brand);
+  color: var(--gray-0);
+}
+
+.syn-btn--scale-active:hover:not(:disabled) {
+  background: var(--brand-hover);
 }
 
 .syn-settings__field {
@@ -59,11 +59,11 @@
   display: flex;
   align-items: center;
   gap: var(--size-2);
+  min-width: 7em;
 }
 
 @media (max-width: 500px) {
   .syn-settings__row {
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
   }
 }

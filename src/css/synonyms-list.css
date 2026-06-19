@@ -3,7 +3,7 @@
 }
 
 .syn-list__heading {
-  font-size: var(--font-size--2);
+  font-size: var(--font-size-1);
   font-weight: 400;
   color: var(--text-2);
   margin-bottom: var(--size-3);
@@ -15,7 +15,7 @@
 }
 
 .syn-list__not-found {
-  font-size: var(--font-size--2);
+  font-size: var(--font-size-1);
   color: var(--text-2);
 }
 
@@ -32,8 +32,8 @@
 }
 
 .syn-card__title {
-  font-size: var(--font-size--2);
-  font-weight: 600;
+  font-size: var(--font-size-0);
+  font-weight: var(--font-weight-7);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-2);
@@ -41,8 +41,8 @@
 }
 
 .syn-card__synonyms {
-  font-size: var(--font-size--1);
-  line-height: 1.5;
+  font-size: var(--font-size-1);
+  line-height: var(--font-lineheight-3);
   color: var(--brand);
   margin: 0;
 }

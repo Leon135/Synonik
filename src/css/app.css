@@ -1,6 +1,7 @@
 .syn-app {
   display: flex;
   flex-direction: column;
+  min-height: 100dvh;
   background: var(--surface-1);
 }
 
@@ -12,7 +13,7 @@
 .syn-main__description {
   margin-top: 0;
   margin-bottom: var(--size-5);
-  font-size: var(--font-size--2);
+  font-size: var(--font-size-0);
   color: var(--text-2);
 }
 

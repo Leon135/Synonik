@@ -10,13 +10,13 @@
 .syn-error__title {
   margin: 0 0 var(--size-1);
   color: var(--error);
-  font-size: var(--font-size--1);
-  font-weight: 600;
+  font-size: var(--font-size-1);
+  font-weight: var(--font-weight-6);
 }
 
 .syn-error__text {
   margin: 0;
-  color: #f1aeb5;
-  font-size: var(--font-size--1);
-  line-height: 1.5;
+  color: var(--text-2);
+  font-size: var(--font-size-1);
+  line-height: var(--font-lineheight-3);
 }

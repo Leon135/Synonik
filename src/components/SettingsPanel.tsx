@@ -33,6 +33,15 @@ export default function SettingsPanel({
     setKeys([]);
   }
 
+  function handleScaleChange(newScale: string) {
+    setScale(newScale);
+    document.body.style.zoom = newScale;
+  }
+
+  function handleResetScale() {
+    handleScaleChange("1");
+  }
+
   function handleSave() {
     setSaving(true);
     invoke("register_shortcut", { shortcut: keys.join("+") })
@@ -48,8 +57,9 @@ export default function SettingsPanel({
 
   return (
     <div class="syn-settings">
+      {/* biome-ignore lint/a11y/useSemanticElements: div needed to avoid default button styles */}
       <div
-        class="syn-settings__header"
+        class="syn-collapse-header"
         role="button"
         tabIndex={0}
         onClick={() => setOpen((p) => !p)}
@@ -61,10 +71,10 @@ export default function SettingsPanel({
         }}
       >
         <span>Ustawienia</span>
-        <span class="syn-settings__chevron">{open ? "▴" : "▾"}</span>
+        <span class="syn-collapse-chevron">{open ? "▴" : "▾"}</span>
       </div>
       {open && (
-        <div class="syn-settings__body">
+        <div class="syn-panel">
           <p class="syn-settings__title">Skrót klawiszowy</p>
           <div class="syn-settings__row">
             <div class="syn-settings__field">
@@ -121,21 +131,25 @@ export default function SettingsPanel({
           </div>
 
           <p class="syn-settings__title">Skala interfejsu</p>
-          <div class="syn-settings__row">
-            <input
-              class="syn-settings__slider"
-              type="range"
-              min="0.5"
-              max="2"
-              step="0.1"
-              value={scale}
-              onInput={(e) => {
-                const newScale = (e.target as HTMLInputElement).value;
-                setScale(newScale);
-                document.body.style.zoom = newScale;
-              }}
-            />
-            <p>{parseFloat(scale) * 100}%</p>
+          <div class="syn-settings__scale-btns">
+            {["0.5", "0.75", "1", "1.25", "1.5", "1.75", "2"].map((v) => (
+              <button
+                type="button"
+                class={`syn-btn syn-btn--scale${scale === v ? " syn-btn--scale-active" : ""}`}
+                onClick={() => handleScaleChange(v)}
+              >
+                {`${Number(v) * 100}%`}
+              </button>
+            ))}
+            <button
+              type="button"
+              class="syn-btn syn-btn--scale"
+              style={{ marginLeft: "var(--size-4)"}}
+              onClick={handleResetScale}
+              aria-label="Resetuj skalę"
+            >
+              Reset
+            </button>
           </div>
         </div>
       )}

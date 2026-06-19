@@ -13,7 +13,7 @@ html[data-theme="dark"] {
   --text-1: #ffffffd2;
   --text-2: #aaa;
   color-scheme: dark;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 html[data-theme="light"] {
@@ -30,7 +30,6 @@ html[data-theme="light"] {
   --text-1: #212529;
   --text-2: #6c757d;
   color-scheme: light;
-  font-size: 18px;
 }
 
 @keyframes spin {
@@ -42,7 +41,7 @@ html[data-theme="light"] {
 .syn-input {
   width: 100%;
   padding: var(--size-2) var(--size-3);
-  font-size: var(--font-size--1);
+  font-size: var(--font-size-1);
   background: var(--surface-2);
   color: var(--text-1);
   border: 1px solid var(--surface-4);
@@ -76,6 +75,34 @@ html[data-theme="light"] {
 
 body {
   margin: 0;
+  font-family: var(--font-sans);
+}
+
+.syn-collapse-header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-1);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-1);
+  color: var(--text-2);
+  padding: var(--size-1) 0;
+}
+
+.syn-collapse-header:hover {
+  color: var(--brand);
+}
+
+.syn-collapse-chevron {
+  font-size: var(--font-size-0);
+}
+
+.syn-panel {
+  margin-top: var(--size-2);
+  padding: var(--size-3) var(--size-4);
+  background: var(--surface-2);
+  border: 1px solid var(--surface-4);
+  border-radius: var(--radius-2);
 }
 
 ::-webkit-scrollbar {
@@ -88,7 +115,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--surface-4);
-  border-radius: 4px;
+  border-radius: var(--radius-2);
 }
 
 ::-webkit-scrollbar-thumb:hover {

@@ -3,24 +3,20 @@
   align-items: center;
   gap: var(--size-2);
   padding: var(--size-2) var(--size-4);
-  font-size: var(--font-size--1);
-  font-weight: 600;
+  font-size: var(--font-size-1);
+  font-weight: var(--font-weight-6);
+  margin: 0 auto;
   background: var(--brand);
-  color: white;
+  color: var(--gray-0);
   border: none;
   border-radius: var(--radius-2);
   cursor: pointer;
-  transition:
-    background 0.25s,
-    background-image 0.25s;
+  transition: background 0.25s;
   white-space: nowrap;
 }
 
 .syn-btn:hover:not(:disabled) {
-  background-image: linear-gradient(
-    rgba(255 255 255 / 0.15),
-    rgba(255 255 255 / 0.15)
-  );
+  background: var(--brand-hover);
 }
 
 .syn-btn:disabled {

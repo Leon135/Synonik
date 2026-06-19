@@ -8,7 +8,7 @@ export default function AboutPanel({ shortcut }: { shortcut: string }) {
     <div class="syn-about">
       {/* biome-ignore lint/a11y/useSemanticElements: div needed to avoid default button styles */}
       <div
-        class="syn-about__header"
+        class="syn-collapse-header"
         role="button"
         tabIndex={0}
         onClick={() => setAboutOpen((p) => !p)}
@@ -20,10 +20,10 @@ export default function AboutPanel({ shortcut }: { shortcut: string }) {
         }}
       >
         <span>O programie</span>
-        <span class="syn-about__chevron">{aboutOpen ? "▴" : "▾"}</span>
+        <span class="syn-collapse-chevron">{aboutOpen ? "▴" : "▾"}</span>
       </div>
       {aboutOpen && (
-        <div class="syn-about__body">
+        <div class="syn-about__body syn-panel">
           <p>
             <strong>Synonik</strong> to podręczny i lekki słownik synonimów.
           </p>
