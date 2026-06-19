@@ -1,0 +1,19 @@
+Synonik
+Copyright 2026 Leon135
+
+Licensed under the Apache License, Version 2.0 (the "License").
+You may obtain a copy of the License at https://www.apache.org/licenses/LICENSE-2.0.
+
+---
+
+This product incorporates data from the following third-party sources:
+
+1. Polish thesaurus (synonyms)
+   Copyright (C) 2014-2026 Dobry słownik <redakcja@dobryslownik.pl>
+   Copyright (C) 2004-2014 Marcin Miłkowski <milek_pl@users.sourceforge.net>
+   Licensed under LGPL 2.1.
+   Source: https://dobryslownik.pl/pobierz/
+
+2. Polish inflection data (odmiany słów)
+   Source: https://sjp.pl/sl/odmiany/
+   Licensed under Apache License 2.0.
