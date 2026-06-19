@@ -24,6 +24,11 @@ jobs:
       - name: install frontend dependencies
         run: bun install
 
+      - name: download database
+        run: |
+          curl -L -o database.sqlite `
+            "https://github.com/Leon135/Synonik-db-builder/releases/download/latest/database.sqlite"
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
