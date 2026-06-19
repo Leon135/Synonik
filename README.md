@@ -21,9 +21,9 @@ Select a word, press a shortcut, and get synonyms instantly. Or search it in ui.
 
 Primary color is based on Windows accent color.
 
-![Dark theme about](./screenshots/dark-about.png)
+![Dark theme about & settings](./screenshots/dark-about-settings.png)
 
-![Dark theme search](./screenshots/dark-settings-search.png)
+![Dark theme search](./screenshots/dark-search.png)
 
 ![Light theme search](./screenshots/light-search.png)
 
