@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "preact/hooks";
 import AboutPanel from "./components/AboutPanel";
 import SearchContainer from "./components/SearchContainer";
-import ShortcutConfig from "./components/ShortcutConfig";
+import SettingsPanel from "./components/SettingsPanel";
 import Titlebar from "./components/Titlebar";
 import useTheme from "./hooks/useTheme";
 import "./css/app.css";
@@ -24,8 +24,8 @@ function App() {
         <p class="syn-main__description">
           Znajdź synonimy dla dowolnego polskiego słowa.
         </p>
-        <ShortcutConfig initialShortcut={shortcut} />
         <AboutPanel shortcut={shortcut} />
+        <SettingsPanel initialShortcut={shortcut} />
         <SearchContainer />
       </main>
     </div>
