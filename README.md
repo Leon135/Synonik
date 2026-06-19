@@ -50,6 +50,8 @@ Things I might do someday, in no particular order:
 
 ## Development
 
+Database builder is here: [Github repo](https://github.com/Leon135/Synonik-db-builder)
+
 ### Requirements
 
 - [Bun](https://bun.sh/) (development)
