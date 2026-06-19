@@ -52,7 +52,7 @@ export default function AboutPanel({ shortcut }: { shortcut: string }) {
                 <td>
                   <kbd>Ctrl+L</kbd> lub <kbd>/</kbd>
                 </td>
-                <td>Skup pole wyszukiwania</td>
+                <td>Zaznacz pole wyszukiwania</td>
               </tr>
               <tr>
                 <td>
