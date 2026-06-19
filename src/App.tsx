@@ -21,9 +21,6 @@ function App() {
     <div class="syn-app">
       <Titlebar theme={theme} onToggleTheme={toggle} />
       <main class="syn-main">
-        <p class="syn-main__description">
-          Znajdź synonimy dla dowolnego polskiego słowa.
-        </p>
         <AboutPanel shortcut={shortcut} />
         <SettingsPanel initialShortcut={shortcut} />
         <SearchContainer />

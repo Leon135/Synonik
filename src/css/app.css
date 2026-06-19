@@ -10,13 +10,6 @@
   max-width: 680px;
 }
 
-.syn-main__description {
-  margin-top: 0;
-  margin-bottom: var(--size-5);
-  font-size: var(--font-size-0);
-  color: var(--text-2);
-}
-
 @media (max-width: 500px) {
   .syn-main {
     padding: var(--size-4);
