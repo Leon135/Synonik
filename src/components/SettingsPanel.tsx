@@ -144,7 +144,7 @@ export default function SettingsPanel({
             <button
               type="button"
               class="syn-btn syn-btn--scale"
-              style={{ marginLeft: "var(--size-4)"}}
+              style={{ marginLeft: "var(--size-4)" }}
               onClick={handleResetScale}
               aria-label="Resetuj skalę"
             >

@@ -75,20 +75,21 @@ The installer will be in `src-tauri/target/release/bundle/`.
 
 ### Scripts
 
-| Command | Description |
-|---------|-------------|
-| `bun dev` | Start Vite dev server |
-| `bun run build` | TypeScript + Vite build |
-| `bun lint` | Biome check (format + lint) |
-| `bun lint:fix` | Biome auto-fix everything |
-| `bun tauri dev` | Run app in dev mode |
-| `bun tauri build` | Build installer bundle |
+| Command           | Description                             |
+| ----------------- | --------------------------------------- |
+| `bun dev`         | Start Vite dev server                   |
+| `bun run build`   | TypeScript + Vite build                 |
+| `bun lint`        | ESLint + Prettier check (format + lint) |
+| `bun lint:fix`    | ESLint + Prettier auto-fix everything   |
+| `bun format`      | Prettier format only                    |
+| `bun tauri dev`   | Run app in dev mode                     |
+| `bun tauri build` | Build installer bundle                  |
 
 ### Stack
 
 - **Frontend:** Vite + Preact + TypeScript + Open Props
 - **Backend:** Tauri + Rust + Diesel + SQLite
-- **Quality:** Biome (lint + format), cargo check
+- **Quality:** ESLint + Prettier (lint + format), cargo check
 
 ## License
 

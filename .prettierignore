@@ -1,0 +1,7 @@
+dist
+src-tauri
+node_modules
+public/icon.svg
+Synonik.code-workspace
+.vscode
+.kilo
