@@ -30,10 +30,7 @@ console.log(`  tauri.conf.json -> ${version}`);
 // Cargo.toml
 const cargoPath = join(root, "src-tauri", "Cargo.toml");
 const cargo = readFileSync(cargoPath, "utf-8");
-const updated = cargo.replace(
-  /^version\s*=\s*".*?"/m,
-  `version = "${version}"`,
-);
+const updated = cargo.replace(/^version\s*=\s*".*?"/m, `version = "${version}"`);
 writeFileSync(cargoPath, updated);
 console.log(`  Cargo.toml      -> ${version}`);
 

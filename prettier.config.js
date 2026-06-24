@@ -4,6 +4,8 @@ const config = {
   trailingComma: "all",
   tabWidth: 2,
   useTabs: false,
+  printWidth: 100,
+  vueIndentScriptAndStyle: true,
 };
 
 export default config;

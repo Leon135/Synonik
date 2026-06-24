@@ -1,12 +1,12 @@
+import { createApp } from "vue";
+import { invoke } from "@tauri-apps/api/core";
+import App from "./App.vue";
 import "open-props/normalize";
 import "open-props/style";
-import { invoke } from "@tauri-apps/api/core";
-import { render } from "preact";
-import App from "./App";
 import "./css/base.css";
 
-const root = document.getElementById("root");
-if (root) render(<App />, root);
+const app = createApp(App);
+app.mount("#root");
 
 invoke<string | null>("get_accent_color")
   .then((color) => {
