@@ -43,7 +43,7 @@
   }
 
   onMounted(() => {
-    hotkeys("left,right", (event) => {
+    hotkeys("left,right", (event: KeyboardEvent) => {
       const active = document.activeElement;
       if (!active?.closest(".syn-list")) return;
 

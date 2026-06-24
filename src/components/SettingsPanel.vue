@@ -147,7 +147,8 @@
           isSaved.value = false;
         }, 1500);
       })
-      .catch((_err) => {
+      .catch((error: Error) => {
+        console.error("Failed to save shortcut:", error);
         isSaving.value = false;
       });
   }

@@ -8,20 +8,32 @@ export default function useShortcuts(
   inputRef: Ref<HTMLInputElement | null>,
 ) {
   let unlisten: (() => void) | undefined;
+  let isMounted = false;
 
   onMounted(async () => {
-    unlisten = await listen("shortcut-pressed-input", (event) => {
+    isMounted = true;
+
+    const cleanup = await listen("shortcut-pressed-input", (event) => {
       wordInput.value = event.payload as string;
       getSynonyms(event.payload as string);
     });
 
-    hotkeys("ctrl+l,/", (event) => {
+    hotkeys("ctrl+l,/", (event: KeyboardEvent) => {
       event.preventDefault();
       inputRef.value?.focus();
     });
+
+    if (!isMounted) {
+      cleanup();
+      hotkeys.unbind("ctrl+l,/");
+      return;
+    }
+
+    unlisten = cleanup;
   });
 
   onUnmounted(() => {
+    isMounted = false;
     unlisten?.();
     hotkeys.unbind("ctrl+l,/");
   });

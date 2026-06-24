@@ -124,7 +124,6 @@
         appWindow.minimize();
         break;
       case "close":
-        appWindow.minimize();
         appWindow.hide();
         break;
     }

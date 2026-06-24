@@ -40,6 +40,7 @@ export default function useSearch() {
   function onInputChange(e: Event) {
     const target = e.currentTarget as HTMLInputElement;
     wordInput.value = target.value;
+    errorMessage.value = "";
     if (showSynonyms.value) {
       synonymGroups.value = [];
       showSynonyms.value = false;
@@ -50,6 +51,7 @@ export default function useSearch() {
     wordInput.value = "";
     synonymGroups.value = [];
     showSynonyms.value = false;
+    errorMessage.value = "";
   }
 
   return {
