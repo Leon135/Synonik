@@ -87,7 +87,7 @@ The installer will be in `src-tauri/target/release/bundle/`.
 
 ### Stack
 
-- **Frontend:** Vite + Preact + TypeScript + Open Props
+- **Frontend:** Vite + ~~Preact~~ Vue + TypeScript + Open Props
 - **Backend:** Tauri + Rust + Diesel + SQLite
 - **Quality:** ESLint + Prettier (lint + format), cargo check
 
