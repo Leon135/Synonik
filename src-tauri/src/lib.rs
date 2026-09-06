@@ -47,7 +47,7 @@ pub fn run() {
             shortcut::register_shortcut_on_start(app)?;
 
             if let Err(e) = tray::setup_tray(app) {
-                eprintln!("[Synonik] Nie udało się utworzyć ikony w zasobniku: {e}");
+                eprintln!("[Synonik] Failed to create tray icon: {e}");
             }
 
             Ok(())

@@ -209,7 +209,7 @@
         }, 1500);
       })
       .catch((error: Error) => {
-        console.error("Failed to save shortcut:", error);
+        console.error("[Synonik] Failed to save shortcut:", error);
         isSaving.value = false;
       });
   }

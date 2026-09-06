@@ -18,7 +18,7 @@ impl CurrentShortcut {
 
 fn read_clipboard(app: &tauri::AppHandle) -> String {
     app.clipboard().read_text().unwrap_or_else(|e| {
-        eprintln!("[Synonik] Nie udało się odczytać schowka: {e}");
+        eprintln!("[Synonik] Failed to read clipboard: {e}");
         String::new()
     })
 }
@@ -72,7 +72,7 @@ pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::e
     app.manage(CurrentShortcut::new(Some(shortcut.clone())));  
 
     if let Err(e) = register_shortcut(app.handle().clone(), shortcut) {
-        eprintln!("[Synonik] Nie udało się zarejestrować skrótu przy starcie: {e}");
+        eprintln!("[Synonik] Failed to register shortcut on startup: {e}");
     }
 
     Ok(())  
@@ -88,7 +88,7 @@ pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), 
     let global_shortcut = app.global_shortcut();
 
     let state = app.state::<CurrentShortcut>();
-    let mut current = state.0.lock().map_err(|e| format!("Nie udało się uzyskać dostępu do stanu skrótu: {e}"))?;
+    let mut current = state.0.lock().map_err(|e| format!("Failed to access shortcut state: {e}"))?;
     if let Some(prev) = current.as_deref() {
         let _ = global_shortcut.unregister(prev);
     }
@@ -99,7 +99,7 @@ pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), 
                 handle_shortcut_action(app);
             }
         })
-        .map_err(|e| format!("Nie udało się zarejestrować skrótu: {e}"))?;
+        .map_err(|e| format!("Failed to register shortcut: {e}"))?;
 
     *current = Some(shortcut.clone());
 

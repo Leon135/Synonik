@@ -22,7 +22,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
     let menu = Menu::with_items(app, &[&show_element, &*autostart, &quit_element])?;
 
     let Some(default_icon) = app.default_window_icon().cloned() else {
-        eprintln!("[Synonik] Nie znaleziono domyślnej ikony");
+        eprintln!("[Synonik] Default icon not found");
         return Ok(());
     };
     let _tray = TrayIconBuilder::new()
