@@ -1,32 +1,56 @@
 <script setup lang="ts">
   import { invoke } from "@tauri-apps/api/core";
+  import { listen } from "@tauri-apps/api/event";
   import { useTheme } from "./composables/useTheme";
-  import { onMounted, ref } from "vue";
-  import AboutPanel from "./components/AboutPanel.vue";
+  import { onMounted, onUnmounted, ref } from "vue";
+  import AboutPanel from "./components/AboutSection.vue";
   import Titlebar from "./components/Titlebar.vue";
   import SettingsPanel from "./components/SettingsPanel.vue";
   import SearchContainer from "./components/SearchContainer.vue";
 
-  const { theme, toggle } = useTheme();
+  type View = "lookup" | "settings";
 
+  const { theme, set: setTheme } = useTheme();
+
+  const view = ref<View>("lookup");
   const shortcut = ref("Ctrl+F2");
+  let unlistenShortcutInput: (() => void) | undefined;
+
+  function navigateTo(next: View) {
+    view.value = next;
+  }
 
   onMounted(async () => {
+    unlistenShortcutInput = await listen("shortcut-pressed-input", () => {
+      view.value = "lookup";
+    });
     try {
       shortcut.value = await invoke<string>("get_shortcut");
     } catch {
       // uses default
     }
   });
+
+  onUnmounted(() => {
+    unlistenShortcutInput?.();
+  });
 </script>
 
 <template>
   <div class="syn-app">
-    <Titlebar :theme="theme" :on-toggle-theme="toggle" />
+    <Titlebar :view="view" :on-navigate="navigateTo" />
     <main class="syn-main">
-      <AboutPanel :global-shortcut="shortcut" />
-      <SettingsPanel :global-shortcut="shortcut" />
-      <SearchContainer />
+      <div v-show="view === 'lookup'">
+        <SearchContainer />
+      </div>
+      <div v-show="view === 'settings'">
+        <AboutPanel :global-shortcut="shortcut" />
+        <SettingsPanel
+          :global-shortcut="shortcut"
+          :theme="theme"
+          :on-select-theme="setTheme"
+        />
+      </div>
     </main>
   </div>
 </template>

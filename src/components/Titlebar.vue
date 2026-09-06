@@ -6,15 +6,14 @@
     </section>
     <section class="syn-titlebar__win-controls">
       <button
+        v-if="view === 'lookup'"
         type="button"
         class="syn-titlebar__win-btn"
-        :title="getThemeTitle(theme)"
-        :aria-label="getThemeTitle(theme)"
-        @click="onToggleTheme"
+        title="Ustawienia"
+        aria-label="Ustawienia"
+        @click="onNavigate('settings')"
       >
         <svg
-          v-if="theme === 'system'"
-          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -24,53 +23,35 @@
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="lucide lucide-monitor"
-        >
-          <rect width="20" height="14" x="2" y="3" rx="2" />
-          <line x1="8" x2="16" y1="21" y2="21" />
-          <line x1="12" x2="12" y1="17" y2="21" />
-        </svg>
-        <svg
-          v-else-if="theme === 'light'"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-sun-medium-icon lucide-sun-medium"
-        >
-          <circle cx="12" cy="12" r="4" />
-          <path d="M12 3v1" />
-          <path d="M12 20v1" />
-          <path d="M3 12h1" />
-          <path d="M20 12h1" />
-          <path d="m18.364 5.636-.707.707" />
-          <path d="m6.343 17.657-.707.707" />
-          <path d="m5.636 5.636.707.707" />
-          <path d="m17.657 17.657.707.707" />
-        </svg>
-        <svg
-          v-else
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-moon-icon lucide-moon"
+          class="lucide lucide-settings"
         >
           <path
-            d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+            d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
           />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      </button>
+      <button
+        v-else
+        type="button"
+        class="syn-titlebar__win-btn"
+        title="Wróć"
+        aria-label="Wróć"
+        @click="onNavigate('lookup')"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-chevron-left"
+        >
+          <path d="m15 18-6-6 6-6" />
         </svg>
       </button>
       <button
@@ -129,9 +110,11 @@
 <script setup lang="ts">
   import { getCurrentWindow } from "@tauri-apps/api/window";
 
+  type View = "lookup" | "settings";
+
   defineProps<{
-    theme: string;
-    onToggleTheme: () => void;
+    view: View;
+    onNavigate: (view: View) => void;
   }>();
 
   function handleWindowControl(action: string) {
@@ -144,17 +127,6 @@
       case "close":
         appWindow.hide();
         break;
-    }
-  }
-
-  function getThemeTitle(theme: string) {
-    switch (theme) {
-      case "light":
-        return "Tryb ciemny";
-      case "dark":
-        return "Tryb jasny";
-      default:
-        return "Tryb systemowy";
     }
   }
 </script>

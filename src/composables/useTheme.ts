@@ -1,7 +1,7 @@
 import { onUnmounted, ref, watch } from "vue";
 
 const THEMES = ["system", "dark", "light"] as const;
-type Theme = (typeof THEMES)[number];
+export type Theme = (typeof THEMES)[number];
 
 function isTheme(value: string | null): value is Theme {
   return value !== null && (THEMES as readonly string[]).includes(value);
@@ -30,10 +30,9 @@ export function useTheme() {
   mq.addEventListener("change", onChange);
   onUnmounted(() => mq.removeEventListener("change", onChange));
 
-  function toggle() {
-    const map: Record<Theme, Theme> = { system: "light", light: "dark", dark: "system" };
-    preference.value = map[preference.value];
+  function set(value: Theme) {
+    preference.value = value;
   }
 
-  return { theme: preference, toggle };
+  return { theme: preference, set };
 }
