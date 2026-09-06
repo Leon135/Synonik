@@ -27,6 +27,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
     };
     let _tray = TrayIconBuilder::new()
         .icon(default_icon)
+        .tooltip("Synonik")
         .menu(&menu)
         .show_menu_on_left_click(false)
         .on_menu_event(
