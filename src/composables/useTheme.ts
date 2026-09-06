@@ -1,36 +1,39 @@
-import { ref, watch } from "vue";
+import { onUnmounted, ref, watch } from "vue";
 
-type Theme = "dark" | "light";
+const THEMES = ["system", "dark", "light"] as const;
+type Theme = (typeof THEMES)[number];
 
-function getSavedTheme(): Theme | null {
-  const saved = localStorage.getItem("synonik-theme");
-  if (saved === "dark" || saved === "light") return saved;
-  return null;
+function isTheme(value: string | null): value is Theme {
+  return value !== null && (THEMES as readonly string[]).includes(value);
 }
 
-function getSystemTheme(): Theme {
-  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+function getSystemTheme() {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function applyTheme(theme: Theme) {
-  document.documentElement.setAttribute("data-theme", theme);
+function applyTheme(resolved: "dark" | "light") {
+  document.documentElement.setAttribute("data-theme", resolved);
 }
 
 export function useTheme() {
-  const theme = ref<Theme>(getSavedTheme() ?? getSystemTheme());
+  const saved = localStorage.getItem("synonik-theme");
+  const preference = ref<Theme>(isTheme(saved) ? saved : "system");
 
-  watch(
-    theme,
-    (newTheme) => {
-      applyTheme(newTheme);
-      localStorage.setItem("synonik-theme", newTheme);
-    },
-    { immediate: true },
-  );
-
-  function toggle() {
-    theme.value = theme.value === "dark" ? "light" : "dark";
+  function apply() {
+    applyTheme(preference.value === "system" ? getSystemTheme() : preference.value);
   }
 
-  return { theme, toggle };
+  watch(preference, (v) => { apply(); localStorage.setItem("synonik-theme", v); }, { immediate: true });
+
+  const mq = window.matchMedia("(prefers-color-scheme: dark)");
+  const onChange = () => { if (preference.value === "system") apply(); };
+  mq.addEventListener("change", onChange);
+  onUnmounted(() => mq.removeEventListener("change", onChange));
+
+  function toggle() {
+    const map: Record<Theme, Theme> = { system: "light", light: "dark", dark: "system" };
+    preference.value = map[preference.value];
+  }
+
+  return { theme: preference, toggle };
 }
