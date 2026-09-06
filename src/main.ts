@@ -15,4 +15,6 @@ invoke<string | null>("get_accent_color")
       document.documentElement.style.setProperty("--brand-hover", color);
     }
   })
-  .catch(() => {});
+  .catch((error) => {
+    console.error("[Synonik] Failed to get accent color:", error);
+  });

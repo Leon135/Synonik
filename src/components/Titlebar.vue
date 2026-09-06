@@ -122,10 +122,14 @@
 
     switch (action) {
       case "minimize":
-        appWindow.minimize();
+        appWindow.minimize().catch((error) => {
+          console.error("[Synonik] Failed to minimize window:", error);
+        });
         break;
       case "close":
-        appWindow.hide();
+        appWindow.hide().catch((error) => {
+          console.error("[Synonik] Failed to hide window:", error);
+        });
         break;
     }
   }

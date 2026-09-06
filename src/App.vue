@@ -26,8 +26,8 @@
     });
     try {
       shortcut.value = await invoke<string>("get_shortcut");
-    } catch {
-      // uses default
+    } catch (error) {
+      console.error("[Synonik] Failed to get shortcut:", error);
     }
   });
 

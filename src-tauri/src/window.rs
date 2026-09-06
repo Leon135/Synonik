@@ -11,8 +11,14 @@ pub fn quit_app_command(app_handle: tauri::AppHandle) {
 
 pub fn show_app(app: &tauri::AppHandle) {
     if let Some(window) = app.get_webview_window("main") {
-        let _ = window.show();
-        let _ = window.unminimize();
-        let _ = window.set_focus();
+        if let Err(e) = window.show() {
+            eprintln!("[Synonik] Failed to show window: {e}");
+        }
+        if let Err(e) = window.unminimize() {
+            eprintln!("[Synonik] Failed to unminimize window: {e}");
+        }
+        if let Err(e) = window.set_focus() {
+            eprintln!("[Synonik] Failed to focus window: {e}");
+        }
     }
 }

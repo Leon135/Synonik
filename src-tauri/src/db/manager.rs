@@ -10,18 +10,24 @@ use crate::DbState;
 use super::schema::{base_forms, synonym_groups, word_in_group, words};
 
 fn find_source_db(app: &tauri::App) -> Option<PathBuf> {
+    let resource_dir = match app.path().resource_dir() {
+        Ok(d) => Some(d),
+        Err(e) => {
+            eprintln!("[Synonik] Failed to get resource dir: {e}");
+            None
+        }
+    };
+    let current_dir = match std::env::current_dir() {
+        Ok(d) => Some(d),
+        Err(e) => {
+            eprintln!("[Synonik] Failed to get current dir: {e}");
+            None
+        }
+    };
     let candidates = [
-        app.path()
-            .resource_dir()
-            .ok()
-            .map(|d| d.join("database.sqlite")),
-        app.path()
-            .resource_dir()
-            .ok()
-            .map(|d| d.join("../database.sqlite")),
-        std::env::current_dir()
-            .ok()
-            .map(|d| d.join("database.sqlite")),
+        resource_dir.clone().map(|d| d.join("database.sqlite")),
+        resource_dir.map(|d| d.join("../database.sqlite")),
+        current_dir.map(|d| d.join("database.sqlite")),
     ];
     candidates.into_iter().flatten().find(|p| p.exists())
 }
@@ -30,7 +36,9 @@ pub fn prepare_db(app: &tauri::App) -> Result<(), Box<dyn Error>> {
     let app_config_dir = app.path().app_config_dir().map_err(|_| -> Box<dyn Error> {
         io::Error::other("failed to get app config dir").into()
     })?;
-    fs::create_dir_all(&app_config_dir).ok();
+    if let Err(e) = fs::create_dir_all(&app_config_dir) {
+        eprintln!("[Synonik] Failed to create config dir: {e}");
+    }
     let db_path = app_config_dir.join("database.sqlite");
     if !db_path.exists() {
         let source = find_source_db(app).ok_or_else(|| -> Box<dyn Error> {

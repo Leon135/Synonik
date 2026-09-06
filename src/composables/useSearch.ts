@@ -29,6 +29,7 @@ export default function useSearch() {
         synonymGroups.value = result;
       })
       .catch((error) => {
+        console.error("[Synonik] Search failed:", error);
         errorMessage.value = String(error);
         isSuccess.value = false;
       })

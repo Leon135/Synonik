@@ -34,10 +34,18 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
 
     while (new_clipboard == previous_clipboard || new_clipboard.is_empty()) && attempts < 5 {
         attempts += 1;
-        let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyPress);
-        let _ = user_input.key(monio::Key::KeyC, EventType::KeyPress);
-        let _ = user_input.key(monio::Key::KeyC, EventType::KeyRelease);
-        let _ = user_input.key(monio::Key::ControlLeft, EventType::KeyRelease);
+        if let Err(e) = user_input.key(monio::Key::ControlLeft, EventType::KeyPress) {
+            eprintln!("[Synonik] Failed to simulate key Ctrl press: {e}");
+        }
+        if let Err(e) = user_input.key(monio::Key::KeyC, EventType::KeyPress) {
+            eprintln!("[Synonik] Failed to simulate key C press: {e}");
+        }
+        if let Err(e) = user_input.key(monio::Key::KeyC, EventType::KeyRelease) {
+            eprintln!("[Synonik] Failed to simulate key C release: {e}");
+        }
+        if let Err(e) = user_input.key(monio::Key::ControlLeft, EventType::KeyRelease) {
+            eprintln!("[Synonik] Failed to simulate key Ctrl release: {e}");
+        }
 
         std::thread::sleep(std::time::Duration::from_millis(wait_time));
 
@@ -46,11 +54,15 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
     }
 
     if new_clipboard == previous_clipboard || new_clipboard.is_empty() {
-        app.clipboard().write_text(previous_clipboard).ok();
+        if let Err(e) = app.clipboard().write_text(previous_clipboard) {
+            eprintln!("[Synonik] Failed to restore clipboard: {e}");
+        }
         return String::new();
     }
 
-    app.clipboard().write_text(previous_clipboard).ok();
+    if let Err(e) = app.clipboard().write_text(previous_clipboard) {
+        eprintln!("[Synonik] Failed to restore clipboard: {e}");
+    }
     new_clipboard
 }
 
@@ -59,7 +71,9 @@ fn handle_shortcut_action(app: &tauri::AppHandle) {
     std::thread::spawn(move || {
         let selected_text = get_selected_text(&app);
         show_app(&app);
-        let _ = app.emit_to("main", "shortcut-pressed-input", selected_text);
+        if let Err(e) = app.emit_to("main", "shortcut-pressed-input", selected_text) {
+            eprintln!("[Synonik] Failed to emit shortcut input event: {e}");
+        }
     });
 }
 
@@ -90,7 +104,9 @@ pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), 
     let state = app.state::<CurrentShortcut>();
     let mut current = state.0.lock().map_err(|e| format!("Failed to access shortcut state: {e}"))?;
     if let Some(prev) = current.as_deref() {
-        let _ = global_shortcut.unregister(prev);
+        if let Err(e) = global_shortcut.unregister(prev) {
+            eprintln!("[Synonik] Failed to unregister previous shortcut: {e}");
+        }
     }
 
     global_shortcut
