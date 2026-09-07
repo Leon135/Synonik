@@ -1,16 +1,7 @@
 <template>
   <div class="syn-about">
-    <div
-      class="syn-collapse-header"
-      role="button"
-      tabindex="0"
-      @click="toggle"
-      @keydown="onKeyDown"
-    >
-      <span>O programie</span>
-      <span class="syn-collapse-chevron">{{ aboutOpened ? "▴" : "▾" }}</span>
-    </div>
-    <div v-if="aboutOpened" class="syn-about__body syn-panel">
+    <h3 class="syn-about__title">O programie</h3>
+    <div class="syn-about__body syn-panel">
       <p><strong>Synonik</strong> to podręczny i lekki słownik synonimów.</p>
       <h4>Jak używać?</h4>
       <p class="syn-about__usage">
@@ -53,92 +44,86 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from "vue";
-
   defineProps<{
     globalShortcut: string;
   }>();
-
-  const aboutOpened = ref(false);
-
-  function toggle() {
-    aboutOpened.value = !aboutOpened.value;
-  }
-
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggle();
-    }
-  }
 </script>
 
 <style lang="css" scoped>
   .syn-about {
-    margin-bottom: var(--size-5);
+    font-size: 14px;
+    margin-bottom: var(--syn-space-6);
+  }
+
+  .syn-about__title {
+    margin: 0;
+    color: var(--text-1);
+    font-weight: var(--syn-weight-semibold);
   }
 
   .syn-about__body {
     color: var(--text-2);
-    font-size: var(--font-size-1);
-    line-height: var(--font-lineheight-3);
+    line-height: var(--syn-lineheight-body);
   }
 
   .syn-about__body p {
-    margin: 0 0 var(--size-2);
+    margin: 0 0 var(--syn-space-2);
   }
 
   .syn-about__body h4 {
-    margin: 0 0 var(--size-1);
+    margin: var(--syn-space-3) 0 var(--syn-space-1);
     color: var(--text-1);
-    font-weight: var(--font-weight-7);
-    font-size: var(--font-size-1);
+    font-weight: var(--syn-weight-semibold);
+  }
+
+  .syn-about__body h4:first-of-type {
+    margin-top: 0;
   }
 
   .syn-about__usage {
-    margin: 0 0 var(--size-2);
+    margin: 0 0 var(--syn-space-2);
   }
 
   .syn-about__shortcuts {
     width: 100%;
+    border: none;
     border-collapse: collapse;
-    font-size: var(--font-size-1);
   }
 
   .syn-about__shortcuts th,
   .syn-about__shortcuts td {
     text-align: left;
-    padding: var(--size-1);
+    padding: var(--syn-space-1) var(--syn-space-2);
     vertical-align: middle;
   }
 
   .syn-about__shortcuts th {
     font-weight: var(--font-weight-7);
     color: var(--text-1);
-    padding-bottom: var(--size-0);
+    padding-bottom: var(--syn-space-1);
     border-bottom: 1px solid var(--surface-4);
   }
 
   .syn-about__shortcuts tr {
-    line-height: var(--font-lineheight-5);
+    line-height: 1.4;
   }
 
   .syn-about__shortcuts td:first-child {
     white-space: nowrap;
-    padding-right: var(--size-3);
+    padding-right: var(--syn-space-3);
   }
 
   .syn-about__body kbd {
     background: var(--surface-4);
-    padding: var(--size-1);
+    padding: 1px 5px;
     border-radius: var(--radius-1);
-    font-size: var(--font-size-0);
+    font-size: 13px;
+    font-family: inherit;
   }
 
   .syn-about__footer {
-    margin-top: var(--size-2);
-    padding-top: var(--size-2);
-    border-top: 1px solid var(--surface-4);
-    font-size: var(--font-size-0);
+    margin-top: var(--syn-space-1);
+    padding-top: var(--syn-space-2);
+    font-size: 13px;
   }
 </style>

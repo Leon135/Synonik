@@ -1,10 +1,9 @@
 <template>
   <fieldset ref="containerRef" class="syn-list">
-    <p class="syn-list__heading">
-      Synonimy dla słowa <strong>{{ word }}</strong
-      >:
-    </p>
-    <section v-if="!success && synonymGroups.length === 0" class="syn-list">
+    <legend class="syn-list__heading">
+      Lista synonimów dla słowa <strong>{{ word }}</strong>
+    </legend>
+    <section v-if="!success && synonymGroups.length === 0">
       <p class="syn-list__not-found">
         Nie znaleziono synonimów dla słowa <strong>"{{ word }}"</strong>.
       </p>
@@ -25,7 +24,6 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, ref } from "vue";
   import type { SynonymGroup } from "../types/ResponseTypes";
-  import hotkeys from "hotkeys-js";
 
   defineProps<{
     success: boolean;
@@ -42,40 +40,49 @@
     cards[clamped].focus();
   }
 
-  onMounted(() => {
-    hotkeys("left,right", (event: KeyboardEvent) => {
-      const active = document.activeElement;
-      if (!active?.closest(".syn-list")) return;
+  function onDocumentKeyDown(event: KeyboardEvent) {
+    if (event.defaultPrevented) return;
+    const target = event.target as HTMLElement | null;
+    if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) {
+      return;
+    }
+    const cards = containerRef.value?.querySelectorAll<HTMLElement>(".syn-card");
+    if (!cards?.length || !containerRef.value?.offsetParent) return;
 
+    const activeIndex = Array.from(cards).indexOf(document.activeElement as HTMLElement);
+    if (event.key === "ArrowRight") {
       event.preventDefault();
-      const cards = containerRef.value?.querySelectorAll<HTMLElement>(".syn-card");
-      if (!cards?.length) return;
+      focusCard(activeIndex === -1 ? 0 : activeIndex + 1);
+    } else if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      focusCard(activeIndex === -1 ? cards.length - 1 : activeIndex - 1);
+    }
+  }
 
-      const activeIndex = Array.from(cards).indexOf(active as HTMLElement);
-
-      if (event.key === "ArrowRight" || event.key === "Right") {
-        focusCard(activeIndex + 1);
-      } else if (event.key === "ArrowLeft" || event.key === "Left") {
-        focusCard(activeIndex - 1);
-      }
-    });
+  onMounted(() => {
+    document.addEventListener("keydown", onDocumentKeyDown);
   });
 
   onUnmounted(() => {
-    hotkeys.unbind("left,right");
+    document.removeEventListener("keydown", onDocumentKeyDown);
   });
 </script>
 
 <style lang="css" scoped>
+  fieldset {
+    border: 1px solid var(--surface-4);
+  }
+
   .syn-list {
-    margin-top: var(--size-6);
+    margin-top: var(--syn-space-6);
   }
 
   .syn-list__heading {
-    font-size: var(--font-size-1);
+    font-size: var(--syn-text-body);
     font-weight: 400;
     color: var(--text-2);
-    margin-bottom: var(--size-3);
+    margin-bottom: var(--syn-space-3);
+    padding: 0 var(--syn-space-4);
     margin-top: 0;
   }
 
@@ -84,7 +91,7 @@
   }
 
   .syn-list__not-found {
-    font-size: var(--font-size-1);
+    font-size: var(--syn-text-body);
     color: var(--text-2);
   }
 
@@ -95,9 +102,9 @@
   .syn-card {
     background: var(--surface-2);
     border: 1px solid var(--surface-4);
-    border-radius: var(--radius-2);
-    padding: var(--size-2) var(--size-4);
-    margin-bottom: var(--size-2);
+    border-radius: var(--syn-radius-card);
+    padding: var(--syn-space-3) var(--syn-space-4);
+    margin-bottom: var(--syn-space-2);
   }
 
   .syn-card:focus-visible {
@@ -106,17 +113,15 @@
   }
 
   .syn-card__title {
-    font-size: var(--font-size-0);
-    font-weight: var(--font-weight-7);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--text-2);
-    margin: 0 0 var(--size-1) 0;
+    font-size: var(--syn-text-body);
+    font-weight: var(--syn-weight-semibold);
+    color: var(--text-1);
+    margin: 0 0 var(--syn-space-1) 0;
   }
 
   .syn-card__synonyms {
-    font-size: var(--font-size-1);
-    line-height: var(--font-lineheight-3);
+    font-size: var(--syn-text-body);
+    line-height: var(--syn-lineheight-body);
     color: var(--brand);
     margin: 0;
   }

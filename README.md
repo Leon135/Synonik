@@ -2,7 +2,7 @@
 
 > A lightweight Polish synonym dictionary for your desktop.
 
-Select a word, press a shortcut, and get synonyms instantly. Or search it in ui. Written in Rust + Tauri so it's crazy fast and lightweit. Database is large, but it is only loaded on search, not in RAM.
+Select a word, press a shortcut, and get synonyms instantly. Or search it in ui. Written in Rust + Tauri so it's crazy fast and lightweight. Database is large, but it is only loaded on search, not in RAM.
 
 ## Features
 

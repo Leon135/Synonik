@@ -1,6 +1,7 @@
 dist
 src-preact
 src-tauri
+src/winui
 node_modules
 public/icon.svg
 Synonik.code-workspace

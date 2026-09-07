@@ -28,24 +28,21 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
 
     let previous_clipboard = read_clipboard(app);
 
+    let send_key = |key: monio::Key, event_type: EventType| {
+        if let Err(e) = user_input.key(key, event_type) {
+            eprintln!("[Synonik] Failed to copy selected text: {e}");
+        }
+    };
+    send_key(monio::Key::ControlLeft, EventType::KeyPress);
+    send_key(monio::Key::KeyC, EventType::KeyClick);
+    send_key(monio::Key::ControlLeft, EventType::KeyRelease);
+
     let mut new_clipboard = read_clipboard(app);
     let mut wait_time = 50;
     let mut attempts = 0;
 
     while (new_clipboard == previous_clipboard || new_clipboard.is_empty()) && attempts < 5 {
         attempts += 1;
-        if let Err(e) = user_input.key(monio::Key::ControlLeft, EventType::KeyPress) {
-            eprintln!("[Synonik] Failed to simulate key Ctrl press: {e}");
-        }
-        if let Err(e) = user_input.key(monio::Key::KeyC, EventType::KeyPress) {
-            eprintln!("[Synonik] Failed to simulate key C press: {e}");
-        }
-        if let Err(e) = user_input.key(monio::Key::KeyC, EventType::KeyRelease) {
-            eprintln!("[Synonik] Failed to simulate key C release: {e}");
-        }
-        if let Err(e) = user_input.key(monio::Key::ControlLeft, EventType::KeyRelease) {
-            eprintln!("[Synonik] Failed to simulate key Ctrl release: {e}");
-        }
 
         std::thread::sleep(std::time::Duration::from_millis(wait_time));
 

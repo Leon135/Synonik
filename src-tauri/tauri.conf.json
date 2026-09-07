@@ -18,7 +18,11 @@
         "height": 600,
         "minWidth": 360,
         "minHeight": 300,
-        "decorations": false,
+        "decorations": true,
+        "transparent": true,
+        "windowEffects": {
+          "effects": ["mica"]
+        },
         "zoomHotkeysEnabled": true
       }
     ],

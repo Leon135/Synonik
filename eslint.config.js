@@ -5,7 +5,14 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: ["dist", "src-tauri", "node_modules", ".kilo", "eslint.config.js", "src-preact"],
+    ignores: [
+      "dist",
+      "src-tauri",
+      "node_modules",
+      ".kilo",
+      "eslint.config.js",
+      "src-preact",
+    ],
   },
   {
     extends: [...tseslint.configs.recommended, ...pluginVue.configs["flat/recommended"]],
