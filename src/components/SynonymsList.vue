@@ -43,7 +43,11 @@
   function onDocumentKeyDown(event: KeyboardEvent) {
     if (event.defaultPrevented) return;
     const target = event.target as HTMLElement | null;
-    if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) {
+    if (
+      target?.tagName === "INPUT" ||
+      target?.tagName === "TEXTAREA" ||
+      target?.isContentEditable
+    ) {
       return;
     }
     const cards = containerRef.value?.querySelectorAll<HTMLElement>(".syn-card");

@@ -12,6 +12,7 @@ export default tseslint.config(
       ".kilo",
       "eslint.config.js",
       "src-preact",
+      "src/winui",
     ],
   },
   {
@@ -25,6 +26,7 @@ export default tseslint.config(
     },
     rules: {
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "vue/attribute-hyphenation": "off",
       "vue/multi-word-component-names": "off",
     },
   },
