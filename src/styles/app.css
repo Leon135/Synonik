@@ -1,0 +1,383 @@
+:root {
+  color-scheme: light dark;
+  --syn-accent: Highlight;
+  --syn-on-accent: HighlightText;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: system-ui, "Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: Canvas;
+  color: CanvasText;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  flex-shrink: 0;
+  padding-left: 12px;
+  font-size: 12px;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in srgb, CanvasText 12%, transparent);
+}
+
+.titlebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.titlebar-logo {
+  width: 16px;
+  height: 16px;
+}
+
+.titlebar-title {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.titlebar-controls {
+  display: flex;
+  height: 100%;
+}
+
+.titlebar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.titlebar-btn:hover {
+  opacity: 1;
+  background: color-mix(in srgb, CanvasText 10%, transparent);
+}
+
+.titlebar-btn--close:hover {
+  background: #c42b1c;
+  color: #fff;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, CanvasText 30%, transparent) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, CanvasText 25%, transparent);
+  border-radius: 5px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--syn-accent);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.search-page {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-inner {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.search-field {
+  position: relative;
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 28px 6px 8px;
+  font: inherit;
+  background: color-mix(in srgb, CanvasText 7%, Canvas);
+  color: FieldText;
+  border: 1px solid color-mix(in srgb, CanvasText 15%, transparent);
+  border-radius: 4px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--syn-accent);
+}
+
+.search-clear {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+
+.search-submit {
+  font: inherit;
+  padding: 6px 12px;
+  background: var(--syn-accent);
+  color: var(--syn-on-accent);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.search-submit:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.search-submit:active:not(:disabled) {
+  filter: brightness(0.85);
+}
+
+.search-submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.search-status {
+  margin: 16px 0 0;
+}
+
+.search-status--error {
+  color: CanvasText;
+}
+
+.search-status--hint {
+  opacity: 0.7;
+}
+
+.results-heading {
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 20px 0 8px;
+}
+
+.theme-row {
+  display: flex;
+  gap: 8px;
+}
+
+.theme-btn {
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 10px;
+  background: transparent;
+  color: CanvasText;
+  border: 1px solid color-mix(in srgb, CanvasText 25%, transparent);
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-btn:hover {
+  border-color: color-mix(in srgb, CanvasText 45%, transparent);
+}
+
+.theme-btn--active {
+  background: var(--syn-accent);
+  color: var(--syn-on-accent);
+  border-color: transparent;
+}
+
+.theme-btn--active:hover {
+  border-color: transparent;
+  filter: brightness(0.92);
+}
+
+.settings-section + .settings-section {
+  margin-top: 16px;
+}
+
+.shortcuts-list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.shortcuts-item {
+  padding: 3px 0;
+}
+
+.shortcuts-item kbd {
+  font-family: inherit;
+  font-size: 12px;
+  padding: 1px 6px;
+  border: 1px solid color-mix(in srgb, CanvasText 25%, transparent);
+  border-radius: 4px;
+  background: color-mix(in srgb, CanvasText 6%, transparent);
+}
+
+.scale-buttons {
+  flex-wrap: wrap;
+}
+
+.result-group + .result-group {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, CanvasText 20%, transparent);
+}
+
+.result-meaning {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 3 140px;
+  column-gap: 24px;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 1px 0;
+  break-inside: avoid;
+}
+
+.result-item::before {
+  content: "•";
+  color: var(--syn-accent);
+  margin-right: 6px;
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.result-word {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: color-mix(in srgb, var(--syn-accent) 65%, CanvasText);
+  cursor: pointer;
+  text-align: left;
+}
+
+.result-word:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 2px;
+  padding: 4px 16px 6px;
+  overflow: hidden;
+  border-top: 1px solid color-mix(in srgb, CanvasText 15%, transparent);
+}
+
+.footer-link {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  opacity: 0.6;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.footer-link--active {
+  opacity: 1;
+  color: color-mix(in srgb, var(--syn-accent) 75%, CanvasText);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--syn-accent);
+}
+
+:focus-visible {
+  outline: 2px solid Highlight;
+  outline-offset: 1px;
+}
+
+::selection {
+  background: Highlight;
+  color: HighlightText;
+}

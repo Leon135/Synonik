@@ -91,30 +91,41 @@ pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::e
 
 #[tauri::command]
 pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), String> {
-    // Persist to store first, so a failed save doesn't leave stale state
+    let global_shortcut = app.global_shortcut();
+
+    // Register first: on failure the previous hotkey stays active and nothing
+    // is persisted, so the app never ends up with no shortcut and a stale
+    // invalid value in settings.json.
+    global_shortcut
+        .unregister_all()
+        .map_err(|e| format!("Failed to unregister previous shortcuts: {e}"))?;
+
+    if let Err(e) = global_shortcut.on_shortcut(shortcut.as_str(), move |app, _shortcut, event| {
+        if event.state() == ShortcutState::Pressed {
+            handle_shortcut_action(app);
+        }
+    }) {
+        // Best effort: restore the previously active shortcut.
+        let state = app.state::<CurrentShortcut>();
+        if let Ok(current) = state.0.lock() {
+            if let Some(prev) = current.as_deref() {
+                let _ = global_shortcut.on_shortcut(prev, move |app, _shortcut, event| {
+                    if event.state() == ShortcutState::Pressed {
+                        handle_shortcut_action(app);
+                    }
+                });
+            }
+        }
+        return Err(format!("Failed to register shortcut: {e}"));
+    }
+
     let store = app.store("settings.json").map_err(|e| e.to_string())?;
     store.set("shortcut", shortcut.as_str());
     store.save().map_err(|e| e.to_string())?;
 
-    let global_shortcut = app.global_shortcut();
-
     let state = app.state::<CurrentShortcut>();
     let mut current = state.0.lock().map_err(|e| format!("Failed to access shortcut state: {e}"))?;
-    if let Some(prev) = current.as_deref() {
-        if let Err(e) = global_shortcut.unregister(prev) {
-            eprintln!("[Synonik] Failed to unregister previous shortcut: {e}");
-        }
-    }
-
-    global_shortcut
-        .on_shortcut(shortcut.as_str(), move |app, _shortcut, event| {
-            if event.state() == ShortcutState::Pressed {
-                handle_shortcut_action(app);
-            }
-        })
-        .map_err(|e| format!("Failed to register shortcut: {e}"))?;
-
-    *current = Some(shortcut.clone());
+    *current = Some(shortcut);
 
     Ok(())
 }

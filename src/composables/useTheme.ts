@@ -24,10 +24,7 @@ function applyWindowEffect(resolved: "dark" | "light") {
 }
 
 function applyTheme(resolved: "dark" | "light") {
-  const root = document.documentElement;
-  root.setAttribute("data-theme", resolved);
-  root.classList.add(`theme-${resolved}`);
-  root.classList.remove(resolved === "dark" ? "theme-light" : "theme-dark");
+  document.documentElement.setAttribute("data-theme", resolved);
   applyWindowEffect(resolved);
 }
 

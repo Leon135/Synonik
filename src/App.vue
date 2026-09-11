@@ -1,69 +1,48 @@
 <script setup lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
   import { listen } from "@tauri-apps/api/event";
-  import { useTheme } from "./composables/useTheme";
   import { onMounted, onUnmounted, ref } from "vue";
-  import AboutPanel from "./components/AboutSection.vue";
-  import SettingsPanel from "./components/SettingsPanel.vue";
-  import SearchContainer from "./components/SearchContainer.vue";
-  import WinScrollView from "./winui/components/WinScrollView.vue";
-
-  type View = "lookup" | "settings";
+  import AppFooter, { type AppView } from "./components/AppFooter.vue";
+  import TitleBar from "./components/TitleBar.vue";
+  import { loadSystemAccent } from "./composables/useAccent";
+  import { useGlobalShortcut } from "./composables/useGlobalShortcut";
+  import { useTheme } from "./composables/useTheme";
+  import { useUiScale } from "./composables/useUiScale";
+  import AboutView from "./views/AboutView.vue";
+  import SearchView from "./views/SearchView.vue";
+  import SettingsView from "./views/SettingsView.vue";
 
   const { theme, set: setTheme } = useTheme();
 
-  const view = ref<View>("lookup");
-  const shortcut = ref("Ctrl+F2");
-  let unlistenShortcutInput: (() => void) | undefined;
+  const view = ref<AppView>("search");
+  const { restore: restoreUiScale } = useUiScale();
+  const { load: loadShortcut } = useGlobalShortcut();
 
-  function navigateTo(next: View) {
-    view.value = next;
-  }
-
-  function openSettings() {
-    navigateTo("settings");
-  }
+  let unlistenViewSwitch: (() => void) | undefined;
 
   onMounted(async () => {
-    unlistenShortcutInput = await listen("shortcut-pressed-input", () => {
-      view.value = "lookup";
+    unlistenViewSwitch = await listen("shortcut-pressed-input", () => {
+      view.value = "search";
     });
-    try {
-      shortcut.value = await invoke<string>("get_shortcut");
-    } catch (error) {
-      console.error("[Synonik] Failed to get shortcut:", error);
-    }
+    restoreUiScale();
+    await loadShortcut();
+    await loadSystemAccent();
   });
 
   onUnmounted(() => {
-    unlistenShortcutInput?.();
+    unlistenViewSwitch?.();
   });
 </script>
 
 <template>
-  <div class="syn-app">
-    <WinScrollView class="syn-scroll" ContentOrientation="Vertical">
-      <main class="syn-main">
-        <div v-show="view === 'lookup'">
-          <SearchContainer :on-open-settings="openSettings" />
-        </div>
-        <div v-show="view === 'settings'">
-          <div class="syn-back-row">
-            <button
-              type="button"
-              class="syn-icon-btn syn-icon-btn--labeled"
-              title="Powrót do strony wyszukiwania"
-              aria-label="Powrót do strony wyszukiwania"
-              @click="navigateTo('lookup')"
-            >
-              <span class="syn-icon-btn__glyph">&#xE72B;</span>
-              <span class="syn-icon-btn__label">Powrót do strony wyszukiwania</span>
-            </button>
-          </div>
-          <AboutPanel :global-shortcut="shortcut" />
-          <SettingsPanel :global-shortcut="shortcut" :theme="theme" :on-select-theme="setTheme" />
-        </div>
-      </main>
-    </WinScrollView>
+  <div class="app-shell">
+    <TitleBar />
+    <main class="search-page">
+      <div class="search-inner">
+        <SearchView v-show="view === 'search'" />
+        <SettingsView v-show="view === 'settings'" :theme="theme" :set-theme="setTheme" />
+        <AboutView v-show="view === 'about'" />
+      </div>
+    </main>
+    <AppFooter :view="view" @navigate="view = $event" />
   </div>
 </template>
