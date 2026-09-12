@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useGlobalShortcut } from "../composables/useGlobalShortcut";
-  import { openPath, openUrl } from "@tauri-apps/plugin-opener";
+  import { openUrl } from "@tauri-apps/plugin-opener";
 
   const { globalShortcut, isShortcutLoaded } = useGlobalShortcut();
 </script>
