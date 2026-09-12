@@ -20,12 +20,16 @@
   let unlistenViewSwitch: (() => void) | undefined;
 
   onMounted(async () => {
-    unlistenViewSwitch = await listen("shortcut-pressed-input", () => {
-      view.value = "search";
-    });
     restoreUiScale();
     await loadShortcut();
     await loadSystemAccent();
+    try {
+      unlistenViewSwitch = await listen("shortcut-pressed-input", () => {
+        view.value = "search";
+      });
+    } catch (error) {
+      console.error("[Synonik] Failed to listen for view switch:", error);
+    }
   });
 
   onUnmounted(() => {

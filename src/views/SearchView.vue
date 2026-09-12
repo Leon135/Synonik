@@ -57,7 +57,7 @@
 
     <p v-if="isLoading" class="search-status" role="status">Szukanie…</p>
     <p v-else-if="errorMessage" class="search-status search-status--error" role="alert">
-      Nie udało się wyszukać. {{ errorMessage }}
+      Nie udało się wyszukać.
     </p>
     <section v-else-if="showSynonyms" aria-live="polite">
       <p v-if="!isSuccess" class="search-status">Brak synonimów dla „{{ wordInput.trim() }}”.</p>

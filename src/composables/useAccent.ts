@@ -26,7 +26,7 @@ export async function loadSystemAccent(): Promise<void> {
     root.setProperty("--syn-accent", `rgb(${red}, ${green}, ${blue})`);
     root.setProperty(
       "--syn-on-accent",
-      relativeLuminance(red, green, blue) > 0.4 ? "#000" : "#fff",
+      relativeLuminance(red, green, blue) > 0.179 ? "#000" : "#fff",
     );
   } catch (error) {
     console.error("[Synonik] Failed to get accent color:", error);

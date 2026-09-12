@@ -5,6 +5,7 @@ const globalShortcut = ref("Control+F2");
 const shortcutKeys = ref<string[]>([]);
 const shortcutError = ref("");
 const shortcutSaved = ref(false);
+const isShortcutLoaded = ref(false);
 
 export function useGlobalShortcut() {
   async function load(): Promise<void> {
@@ -13,6 +14,8 @@ export function useGlobalShortcut() {
       shortcutKeys.value = globalShortcut.value.split("+").filter(Boolean);
     } catch (error) {
       console.error("[Synonik] Failed to get shortcut:", error);
+    } finally {
+      isShortcutLoaded.value = true;
     }
   }
 
@@ -49,6 +52,7 @@ export function useGlobalShortcut() {
     shortcutKeys,
     shortcutError,
     shortcutSaved,
+    isShortcutLoaded,
     load,
     recordKey,
     clear,

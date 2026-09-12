@@ -121,7 +121,21 @@ pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), 
 
     let store = app.store("settings.json").map_err(|e| e.to_string())?;
     store.set("shortcut", shortcut.as_str());
-    store.save().map_err(|e| e.to_string())?;
+    if let Err(e) = store.save().map_err(|e| e.to_string()) {
+        // Restore previous shortcut: new hotkey is active but not persisted.
+        let _ = global_shortcut.unregister_all();
+        let state = app.state::<CurrentShortcut>();
+        if let Ok(current) = state.0.lock() {
+            if let Some(prev) = current.as_deref() {
+                let _ = global_shortcut.on_shortcut(prev, move |app, _shortcut, event| {
+                    if event.state() == ShortcutState::Pressed {
+                        handle_shortcut_action(app);
+                    }
+                });
+            }
+        }
+        return Err(e);
+    }
 
     let state = app.state::<CurrentShortcut>();
     let mut current = state.0.lock().map_err(|e| format!("Failed to access shortcut state: {e}"))?;

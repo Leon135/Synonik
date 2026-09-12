@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useGlobalShortcut } from "../composables/useGlobalShortcut";
 
-  const { globalShortcut } = useGlobalShortcut();
+  const { globalShortcut, isShortcutLoaded } = useGlobalShortcut();
 </script>
 
 <template>
@@ -19,7 +19,7 @@
       <li class="shortcuts-item">
         <kbd>Ctrl</kbd>+<kbd>L</kbd> lub <kbd>/</kbd> - fokus pola wyszukiwania
       </li>
-      <li class="shortcuts-item">
+      <li v-if="isShortcutLoaded" class="shortcuts-item">
         <kbd>{{ globalShortcut }}</kbd> - otwórz popup z zaznaczonym tekstem
       </li>
     </ul>

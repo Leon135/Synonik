@@ -6,7 +6,7 @@
   const props = defineProps<{ theme: Theme; setTheme: (value: Theme) => void }>();
 
   const { uiScale, apply: applyUiScale } = useUiScale();
-  const { shortcutKeys, shortcutError, shortcutSaved, recordKey, clear, save } =
+  const { shortcutKeys, shortcutError, shortcutSaved, isShortcutLoaded, recordKey, clear, save } =
     useGlobalShortcut();
 
   function setThemeChoice(value: Theme): void {
@@ -62,7 +62,7 @@
 
     <div class="settings-section">
       <h2 class="section-title">Globalny skrót</h2>
-      <form class="search-row" @submit.prevent="save">
+      <form v-if="isShortcutLoaded" class="search-row" @submit.prevent="save">
         <div class="search-field">
           <input
             class="search-input"
