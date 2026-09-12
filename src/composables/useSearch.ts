@@ -16,26 +16,22 @@ export default function useSearch() {
     if (!word.trim()) return;
     isLoading.value = true;
 
-    await invoke<[string, string][]>("search_synonyms", {
-      word: word.trim().toLowerCase(),
-    })
-      .then((response) => {
-        return groupSynonyms(response);
-      })
-      .then((result) => {
-        errorMessage.value = "";
-        isSuccess.value = result.length > 0;
-        showSynonyms.value = true;
-        synonymGroups.value = result;
-      })
-      .catch((error) => {
-        console.error("[Synonik] Search failed:", error);
-        errorMessage.value = String(error);
-        isSuccess.value = false;
-      })
-      .finally(() => {
-        isLoading.value = false;
+    try {
+      const response = await invoke<[string, string][]>("search_synonyms", {
+        word: word.trim().toLowerCase(),
       });
+      const result = groupSynonyms(response);
+      errorMessage.value = "";
+      isSuccess.value = result.length > 0;
+      showSynonyms.value = true;
+      synonymGroups.value = result;
+    } catch (error) {
+      console.error("[Synonik] Search failed:", error);
+      errorMessage.value = String(error);
+      isSuccess.value = false;
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   function onInputChange(e: Event) {

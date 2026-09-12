@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 *.sqlite
+
+.opencode*/
+PRODUCT.md

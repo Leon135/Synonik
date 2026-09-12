@@ -5,7 +5,15 @@ import globals from "globals";
 
 export default tseslint.config(
   {
-    ignores: ["dist", "src-tauri", "node_modules", ".kilo", "eslint.config.js", "src-preact"],
+    ignores: [
+      "dist",
+      "src-tauri",
+      "node_modules",
+      ".kilo",
+      "eslint.config.js",
+      "src-preact",
+      "src/winui",
+    ],
   },
   {
     extends: [...tseslint.configs.recommended, ...pluginVue.configs["flat/recommended"]],
@@ -18,6 +26,7 @@ export default tseslint.config(
     },
     rules: {
       "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "vue/attribute-hyphenation": "off",
       "vue/multi-word-component-names": "off",
     },
   },

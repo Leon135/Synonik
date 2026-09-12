@@ -1,56 +1,52 @@
 <script setup lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
   import { listen } from "@tauri-apps/api/event";
-  import { useTheme } from "./composables/useTheme";
   import { onMounted, onUnmounted, ref } from "vue";
-  import AboutPanel from "./components/AboutSection.vue";
-  import Titlebar from "./components/Titlebar.vue";
-  import SettingsPanel from "./components/SettingsPanel.vue";
-  import SearchContainer from "./components/SearchContainer.vue";
-
-  type View = "lookup" | "settings";
+  import AppFooter, { type AppView } from "./components/AppFooter.vue";
+  import TitleBar from "./components/TitleBar.vue";
+  import { loadSystemAccent } from "./composables/useAccent";
+  import { useGlobalShortcut } from "./composables/useGlobalShortcut";
+  import { useTheme } from "./composables/useTheme";
+  import { useUiScale } from "./composables/useUiScale";
+  import AboutView from "./views/AboutView.vue";
+  import SearchView from "./views/SearchView.vue";
+  import SettingsView from "./views/SettingsView.vue";
 
   const { theme, set: setTheme } = useTheme();
 
-  const view = ref<View>("lookup");
-  const shortcut = ref("Ctrl+F2");
-  let unlistenShortcutInput: (() => void) | undefined;
+  const view = ref<AppView>("search");
+  const { restore: restoreUiScale } = useUiScale();
+  const { load: loadShortcut } = useGlobalShortcut();
 
-  function navigateTo(next: View) {
-    view.value = next;
-  }
+  let unlistenViewSwitch: (() => void) | undefined;
 
   onMounted(async () => {
-    unlistenShortcutInput = await listen("shortcut-pressed-input", () => {
-      view.value = "lookup";
-    });
+    restoreUiScale();
+    await loadShortcut();
+    await loadSystemAccent();
     try {
-      shortcut.value = await invoke<string>("get_shortcut");
+      unlistenViewSwitch = await listen("shortcut-pressed-input", () => {
+        view.value = "search";
+      });
     } catch (error) {
-      console.error("[Synonik] Failed to get shortcut:", error);
+      console.error("[Synonik] Failed to listen for view switch:", error);
     }
   });
 
   onUnmounted(() => {
-    unlistenShortcutInput?.();
+    unlistenViewSwitch?.();
   });
 </script>
 
 <template>
-  <div class="syn-app">
-    <Titlebar :view="view" :on-navigate="navigateTo" />
-    <main class="syn-main">
-      <div v-show="view === 'lookup'">
-        <SearchContainer />
-      </div>
-      <div v-show="view === 'settings'">
-        <AboutPanel :global-shortcut="shortcut" />
-        <SettingsPanel
-          :global-shortcut="shortcut"
-          :theme="theme"
-          :on-select-theme="setTheme"
-        />
+  <div class="app-shell">
+    <TitleBar />
+    <main class="views">
+      <div class="view-inner">
+        <SearchView v-show="view === 'search'" />
+        <SettingsView v-show="view === 'settings'" :theme="theme" :set-theme="setTheme" />
+        <AboutView v-show="view === 'about'" />
       </div>
     </main>
+    <AppFooter :view="view" @navigate="view = $event" />
   </div>
 </template>

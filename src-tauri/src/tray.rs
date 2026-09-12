@@ -41,9 +41,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
                 "quit" => {
                     quit_app(app);
                 }
-                other => {
-                    eprintln!("[Synonik] Unhandled tray menu event: {other}");
-                }
+                _ => {}
             },
         )
         .on_tray_icon_event(|tray, event| match event {
@@ -55,9 +53,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
             } => {
                 show_app(tray.app_handle());
             }
-            other => {
-                eprintln!("[Synonik] Unhandled tray icon event: {other:?}");
-            }
+            _ => {}
         })
         .build(app)?;
     Ok(())

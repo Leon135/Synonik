@@ -19,6 +19,7 @@
         "minWidth": 360,
         "minHeight": 300,
         "decorations": false,
+        "transparent": true,
         "zoomHotkeysEnabled": true
       }
     ],
@@ -53,14 +54,14 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "windows": {  
-      "nsis": {  
-        "languages": ["Polish"],  
-        "displayLanguageSelector": false  
+    "windows": {
+      "nsis": {
+        "languages": ["Polish"],
+        "displayLanguageSelector": false
       },
       "wix": {
         "language": "pl-PL"
-      }  
-    }  
+      }
+    }
   }
 }

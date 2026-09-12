@@ -1,4 +1,5 @@
 import { onUnmounted, ref, watch } from "vue";
+import { getCurrentWindow, type Effect } from "@tauri-apps/api/window";
 
 const THEMES = ["system", "dark", "light"] as const;
 export type Theme = (typeof THEMES)[number];
@@ -11,8 +12,20 @@ function getSystemTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function applyWindowEffect(resolved: "dark" | "light") {
+  // "micaDark"/"micaLight" are valid Rust-side WindowEffects but are missing
+  // from the JS Effect type — cast is intentional
+  const effect = (resolved === "dark" ? "micaDark" : "micaLight") as unknown as Effect;
+  getCurrentWindow()
+    .setEffects({ effects: [effect] })
+    .catch(() => {
+      /* Mica unavailable (e.g. Win10) — opaque fallback via CSS */
+    });
+}
+
 function applyTheme(resolved: "dark" | "light") {
   document.documentElement.setAttribute("data-theme", resolved);
+  applyWindowEffect(resolved);
 }
 
 export function useTheme() {
@@ -20,13 +33,26 @@ export function useTheme() {
   const preference = ref<Theme>(isTheme(saved) ? saved : "system");
 
   function apply() {
-    applyTheme(preference.value === "system" ? getSystemTheme() : preference.value);
+    if (preference.value === "system") {
+      applyTheme(getSystemTheme());
+    } else {
+      applyTheme(preference.value);
+    }
   }
 
-  watch(preference, (v) => { apply(); localStorage.setItem("synonik-theme", v); }, { immediate: true });
+  watch(
+    preference,
+    (v) => {
+      apply();
+      localStorage.setItem("synonik-theme", v);
+    },
+    { immediate: true },
+  );
 
   const mq = window.matchMedia("(prefers-color-scheme: dark)");
-  const onChange = () => { if (preference.value === "system") apply(); };
+  const onChange = () => {
+    if (preference.value === "system") apply();
+  };
   mq.addEventListener("change", onChange);
   onUnmounted(() => mq.removeEventListener("change", onChange));
 
