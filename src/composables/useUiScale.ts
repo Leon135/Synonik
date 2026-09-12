@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
 const UI_SCALE_KEY = "synonik-ui-scale";
-const CONTENT_SELECTOR = ".search-inner";
+const CONTENT_SELECTOR = ".view-inner";
 
 export const uiScalePresets = [50, 75, 100, 110, 125, 150, 175, 200];
 

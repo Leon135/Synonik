@@ -40,8 +40,8 @@
 <template>
   <div class="app-shell">
     <TitleBar />
-    <main class="search-page">
-      <div class="search-inner">
+    <main class="views">
+      <div class="view-inner">
         <SearchView v-show="view === 'search'" />
         <SettingsView v-show="view === 'settings'" :theme="theme" :set-theme="setTheme" />
         <AboutView v-show="view === 'about'" />
