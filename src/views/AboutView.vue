@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { useGlobalShortcut } from "../composables/useGlobalShortcut";
+  import { openPath, openUrl } from "@tauri-apps/plugin-opener";
 
   const { globalShortcut, isShortcutLoaded } = useGlobalShortcut();
 </script>
@@ -8,8 +9,12 @@
   <section aria-label="O programie">
     <h1 class="page-title">O programie</h1>
     <p class="search-status">
-      Synonik to lekki słownik synonimów języka polskiego. Szybkie wyszukiwanie z lokalnej bazy,
-      globalny skrót, motyw systemowy.
+      Synonik to lekki i szybki słownik synonimów języka polskiego. Wyszukiwanie na bazie lokalnej
+      bazy danych sqlite z globalnym skrótem klawiszowym.
+    </p>
+    <p>
+      Autor: <a @click="() => openUrl('https://leon135.xyz')">Leon135</a> <br />
+      Repozytorium: <a @click="() => openUrl('https://github.com/Leon135/synonik')">GitHub</a>
     </p>
     <p class="search-status search-status--hint">Licencja: Apache 2.0.</p>
 
@@ -25,3 +30,11 @@
     </ul>
   </section>
 </template>
+
+<style>
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+    color: var(--syn-accent);
+  }
+</style>
