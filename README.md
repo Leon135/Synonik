@@ -2,30 +2,37 @@
 
 > A lightweight Polish synonym dictionary for your desktop.
 
-Select a word, press a shortcut, and get synonyms instantly. Or search it in ui. Written in Rust + Tauri so it's crazy fast and lightweight. Database is large, but it is only loaded on search, not in RAM.
+Synonik ("synonim" - synonym + "słownik" - dictionary)
+
+**I've always struggled with repeating the same words over and over when writing. I wanted a way to quickly find synonyms without opening a browser, so I built Synonik.**
+
+Select a word, press a shortcut, and get synonyms instantly. Or search directly in the app. Written in Rust + Tauri so it's fast and lightweight. The database is large, but it is only queried on search, not kept in RAM.
 
 ## Features
 
 - Fast and lightweight
 - Synonym lookup from a local SQLite database
 - Global customizable hotkey (default `Ctrl+F2`) — select text, press the shortcut, see synonyms
-- In app shortcuts
-- Dark/light theme toggle with persistence
+- In-app shortcuts: `Enter` to search, `Ctrl+L` or `/` to focus the search field
+- Click a synonym to search it
+- Dark / light / system theme with persistence
 - Windows system accent color detection
+- Interface scale presets (50–200%) with persistence
 - System tray icon: show, autostart, quit
 - Custom titlebar with minimize/close buttons
-- Tray icon
 - Full Polish UI
 
 ## Screenshots
 
-Primary color is based on Windows accent color.
-
-<img src="./screenshots/dark-about-settings.png" alt="Dark theme about & settings" width="500">
+Primary color is based on the Windows accent color.
 
 <img src="./screenshots/dark-search.png" alt="Dark theme search" width="500">
 
-<img src="./screenshots/light-search.png" alt="Light theme search" width="500">
+<img src="./screenshots/white-search.png" alt="Light theme search" width="500">
+
+<img src="./screenshots/dark-settings.png" alt="Dark theme settings" width="500">
+
+<img src="./screenshots/dark-about.png" alt="Dark theme about" width="500">
 
 ## Download
 
@@ -44,7 +51,6 @@ Things I might do someday, in no particular order:
 - Linux / macOS support
 - Search history
 - Search-as-you-type
-- Click a synonym to search it
 - Release build pipeline (GitHub Actions)
 - Support for other languages (starting with English)
 
@@ -79,6 +85,7 @@ The installer will be in `src-tauri/target/release/bundle/`.
 | ----------------- | --------------------------------------- |
 | `bun dev`         | Start Vite dev server                   |
 | `bun run build`   | TypeScript + Vite build                 |
+| `bun release`     | Version bump + changelog via script     |
 | `bun lint`        | ESLint + Prettier check (format + lint) |
 | `bun lint:fix`    | ESLint + Prettier auto-fix everything   |
 | `bun format`      | Prettier format only                    |
