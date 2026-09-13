@@ -6,12 +6,19 @@ const shortcutKeys = ref<string[]>([]);
 const shortcutError = ref("");
 const shortcutSaved = ref(false);
 const isShortcutLoaded = ref(false);
+const isManualShortcutMode = ref(false);
+const manualToggleCommand = ref("synonik --toggle");
+const manualCommandCopied = ref(false);
 
 export function useGlobalShortcut() {
   async function load(): Promise<void> {
     try {
       globalShortcut.value = await invoke<string>("get_shortcut");
       shortcutKeys.value = globalShortcut.value.split("+").filter(Boolean);
+      isManualShortcutMode.value = await invoke<boolean>("is_manual_shortcut");
+      if (isManualShortcutMode.value) {
+        manualToggleCommand.value = await invoke<string>("get_toggle_command");
+      }
     } catch (error) {
       console.error("[Synonik] Failed to get shortcut:", error);
     } finally {
@@ -47,15 +54,29 @@ export function useGlobalShortcut() {
     }
   }
 
+  async function copyToggleCommand(): Promise<void> {
+    manualCommandCopied.value = false;
+    try {
+      await navigator.clipboard.writeText(manualToggleCommand.value);
+      manualCommandCopied.value = true;
+    } catch (error) {
+      console.error("[Synonik] Failed to copy toggle command:", error);
+    }
+  }
+
   return {
     globalShortcut,
     shortcutKeys,
     shortcutError,
     shortcutSaved,
     isShortcutLoaded,
+    isManualShortcutMode,
+    manualToggleCommand,
+    manualCommandCopied,
     load,
     recordKey,
     clear,
     save,
+    copyToggleCommand,
   };
 }

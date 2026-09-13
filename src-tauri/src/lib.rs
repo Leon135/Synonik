@@ -31,6 +31,8 @@ pub fn run() {
             db::manager::search_synonyms,
             window::quit_app_command,
             shortcut::register_shortcut,
+            shortcut::is_manual_shortcut,
+            shortcut::get_toggle_command,
             store::get_shortcut,
             accent::get_accent_color
         ])

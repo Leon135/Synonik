@@ -6,7 +6,7 @@
   const props = defineProps<{ theme: Theme; setTheme: (value: Theme) => void }>();
 
   const { uiScale, apply: applyUiScale } = useUiScale();
-  const { shortcutKeys, shortcutError, shortcutSaved, isShortcutLoaded, recordKey, clear, save } =
+  const { shortcutKeys, shortcutError, shortcutSaved, isShortcutLoaded, isManualShortcutMode, manualToggleCommand, manualCommandCopied, recordKey, clear, save, copyToggleCommand } =
     useGlobalShortcut();
 
   function setThemeChoice(value: Theme): void {
@@ -62,7 +62,31 @@
 
     <div class="settings-section">
       <h2 class="section-title">Globalny skrót</h2>
-      <form v-if="isShortcutLoaded" class="search-row" @submit.prevent="save">
+      <div v-if="isManualShortcutMode" class="manual-shortcut">
+        <p class="search-status">Wayland nie pozwala aplikacjom przechwytywać klawiszy globalnie. Dodaj skrót ręcznie w GNOME:</p>
+        <div class="search-row">
+          <div class="search-field">
+            <input
+              class="search-input"
+              type="text"
+              readonly
+              :value="manualToggleCommand"
+              aria-label="Komenda przełączająca Synonik"
+              autocomplete="off"
+              spellcheck="false"
+              @focus="($event.target as HTMLInputElement).select()"
+            />
+          </div>
+          <button type="button" class="search-submit" @click="copyToggleCommand">Kopiuj</button>
+        </div>
+        <p v-if="manualCommandCopied" class="search-status" role="status">Skopiowano komendę.</p>
+        <ol class="shortcuts-list">
+          <li class="shortcuts-item">Otwórz Ustawienia → Klawiatura → Pokaż i dostosuj skróty → Własne skróty.</li>
+          <li class="shortcuts-item">Dodaj nowy skrót, wklej skopiowaną komendę i wybierz klawisze.</li>
+          <li class="shortcuts-item">Zaznacz tekst przed użyciem skrótu (czytany jest schowek PRIMARY, wymagany pakiet wl-clipboard).</li>
+        </ol>
+      </div>
+      <form v-else-if="isShortcutLoaded" class="search-row" @submit.prevent="save">
         <div class="search-field">
           <input
             class="search-input"

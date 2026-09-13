@@ -88,70 +88,31 @@ pub(crate) fn handle_toggle(app: &tauri::AppHandle, argv: &[String]) {
 
 #[cfg(target_os = "linux")]
 fn is_wayland() -> bool {
-    if let Ok(t) = std::env::var("XDG_SESSION_TYPE") {
-        if t.eq_ignore_ascii_case("wayland") {
+    if let Ok(session_type) = std::env::var("XDG_SESSION_TYPE") {
+        if session_type.eq_ignore_ascii_case("wayland") {
             return true;
         }
-        if t.eq_ignore_ascii_case("x11") {
+        if session_type.eq_ignore_ascii_case("x11") {
             return false;
         }
     }
     std::env::var("WAYLAND_DISPLAY").is_ok()
 }
 
-#[cfg(target_os = "linux")]
-fn to_gnome_binding(shortcut: &str) -> String {
-    shortcut
-        .split('+')
-        .map(|part| match part.trim().to_lowercase().as_str() {
-            "control" | "ctrl" | "commandorcontrol" => "<Control>".to_string(),
-            "shift" => "<Shift>".to_string(),
-            "alt" => "<Alt>".to_string(),
-            "super" | "meta" => "<Super>".to_string(),
-            _ => part.trim().to_string(),
-        })
-        .collect::<Vec<_>>()
-        .join("")
+#[tauri::command]
+pub fn is_manual_shortcut() -> bool {
+    #[cfg(target_os = "linux")]
+    return is_wayland();
+    #[cfg(not(target_os = "linux"))]
+    return false;
 }
 
-#[cfg(target_os = "linux")]
-fn gsettings(args: &[&str]) -> Result<String, String> {
-    let out = std::process::Command::new("gsettings")
-        .args(args)
-        .output()
-        .map_err(|e| e.to_string())?;
-    if !out.status.success() {
-        return Err(String::from_utf8_lossy(&out.stderr).trim().to_string());
+#[tauri::command]
+pub fn get_toggle_command() -> String {
+    match std::env::current_exe() {
+        Ok(exe_path) => format!("\"{}\" --toggle", exe_path.display()),
+        Err(_) => "synonik --toggle".to_string(),
     }
-    Ok(String::from_utf8_lossy(&out.stdout).trim().to_string())
-}
-
-#[cfg(target_os = "linux")]
-fn register_gnome_keybinding(shortcut: &str) -> Result<(), String> {
-    const PATH: &str =
-        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/synonik/";
-    const SCHEMA: &str = "org.gnome.settings-daemon.plugins.media-keys";
-    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
-    let command = format!("'\"{}\" --toggle'", exe.display());
-
-    let list = gsettings(&["get", SCHEMA, "custom-keybindings"])?;
-    if !list.contains(PATH) {
-        let updated = if list.trim() == "@as []" || list.trim() == "[]" {
-            format!("['{PATH}']")
-        } else {
-            format!(
-                "[{}, '{PATH}']",
-                list.trim().trim_start_matches('[').trim_end_matches(']')
-            )
-        };
-        gsettings(&["set", SCHEMA, "custom-keybindings", &updated])?;
-    }
-
-    let key = format!("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:{PATH}");
-    gsettings(&["set", &key, "name", "Synonik"])?;
-    gsettings(&["set", &key, "command", &command])?;
-    gsettings(&["set", &key, "binding", &to_gnome_binding(shortcut)])?;
-    Ok(())
 }
 
 fn persist_shortcut(app: &tauri::AppHandle, shortcut: String) -> Result<(), String> {
@@ -173,9 +134,6 @@ pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::e
 
     #[cfg(target_os = "linux")]
     if is_wayland() {
-        if let Err(e) = register_gnome_keybinding(&shortcut) {
-            eprintln!("[Synonik] GNOME keybinding failed: {e}");
-        }
         return Ok(());
     }
 
@@ -190,7 +148,6 @@ pub fn register_shortcut_on_start(app: &tauri::App) -> Result<(), Box<dyn std::e
 pub fn register_shortcut(app: tauri::AppHandle, shortcut: String) -> Result<(), String> {
     #[cfg(target_os = "linux")]
     if is_wayland() {
-        register_gnome_keybinding(&shortcut)?;
         return persist_shortcut(&app, shortcut);
     }
 
