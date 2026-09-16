@@ -27,3 +27,6 @@ dist-ssr
 
 .opencode*/
 PRODUCT.md
+
+# Personal VSCode workspace (references sibling dirs others won't have)
+Synonik.code-workspace
