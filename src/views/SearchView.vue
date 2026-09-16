@@ -55,14 +55,14 @@
       </button>
     </form>
 
-    <p v-if="isLoading" class="search-status" role="status">Szukanie…</p>
-    <p v-else-if="errorMessage" class="search-status search-status--error" role="alert">
+    <p v-if="isLoading" class="text-status" role="status">Szukanie…</p>
+    <p v-else-if="errorMessage" class="text-status text-status--error" role="alert">
       Nie udało się wyszukać.
     </p>
     <section v-else-if="showSynonyms" aria-live="polite">
-      <p v-if="!isSuccess" class="search-status">Brak synonimów dla „{{ wordInput.trim() }}”.</p>
+      <p v-if="!isSuccess" class="text-status">Brak synonimów dla „{{ wordInput.trim() }}”.</p>
       <div v-else>
-        <p class="search-status results-heading">Lista synonimów dla „{{ wordInput.trim() }}”:</p>
+        <p class="text-status results-heading">Lista synonimów dla „{{ wordInput.trim() }}”:</p>
         <section
           v-for="synonymGroup in synonymGroups"
           :key="synonymGroup.group_meaning"
@@ -85,6 +85,6 @@
         </section>
       </div>
     </section>
-    <p v-else class="search-status search-status--hint">Wpisz słowo i naciśnij Szukaj.</p>
+    <p v-else class="text-status text-status--hint">Wpisz słowo i naciśnij Szukaj.</p>
   </section>
 </template>

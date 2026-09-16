@@ -201,15 +201,15 @@ html {
   cursor: default;
 }
 
-.search-status {
+.text-status {
   margin: 16px 0 0;
 }
 
-.search-status--error {
+.text-status--error {
   color: CanvasText;
 }
 
-.search-status--hint {
+.text-status--hint {
   opacity: 0.7;
 }
 
@@ -264,6 +264,22 @@ html {
 
 .settings-section + .settings-section {
   margin-top: 16px;
+}
+
+.manual-command-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 0;
+}
+
+.manual-command {
+  margin: 0;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--syn-accent);
+  overflow-wrap: anywhere;
 }
 
 .shortcuts-list {
