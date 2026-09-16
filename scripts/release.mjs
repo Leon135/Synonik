@@ -8,8 +8,8 @@ const root = join(__dirname, "..");
 const version = process.argv[2];
 
 if (!version || !/^\d+\.\d+\.\d+$/.test(version)) {
-  console.error("Usage: bun run release -- <semver>");
-  console.error("Example: bun run release -- 0.2.0");
+  console.error("Usage: bun run release <semver>");
+  console.error("Example: bun run release 0.2.0");
   process.exit(1);
 }
 
@@ -34,7 +34,4 @@ const updated = cargo.replace(/^version\s*=\s*".*?"/m, `version = "${version}"`)
 writeFileSync(cargoPath, updated);
 console.log(`  Cargo.toml      -> ${version}`);
 
-console.log(`\nDone. Commit and push to release:\n`);
-console.log(
-  `  git add -A && git commit -m "chore: bump to v${version}" && git push origin master:release`,
-);
+console.log(`\nDone.\n`);
