@@ -6,8 +6,22 @@
   const props = defineProps<{ theme: Theme; setTheme: (value: Theme) => void }>();
 
   const { uiScale, apply: applyUiScale } = useUiScale();
-  const { shortcutKeys, shortcutError, shortcutSaved, isShortcutLoaded, recordKey, clear, save } =
-    useGlobalShortcut();
+  const {
+    shortcutKeys,
+    shortcutError,
+    shortcutSaved,
+    isShortcutLoaded,
+    isManualShortcutMode,
+    isGnomeDesktop,
+    detectedDesktopEnvironment,
+    manualToggleCommand,
+    manualCommandCopied,
+    recordKey,
+    clear,
+    save,
+    copyToggleCommand,
+    resetManualCommandCopied,
+  } = useGlobalShortcut();
 
   function setThemeChoice(value: Theme): void {
     props.setTheme(value);
@@ -62,7 +76,51 @@
 
     <div class="settings-section">
       <h2 class="section-title">Globalny skrót</h2>
-      <form v-if="isShortcutLoaded" class="search-row" @submit.prevent="save">
+      <div v-if="isManualShortcutMode && isShortcutLoaded" class="manual-shortcut">
+        <p class="text-status">
+          Wayland nie pozwala aplikacjom przechwytywać klawiszy globalnie. Dodaj skrót ręcznie w
+          systemie:
+        </p>
+        <div class="manual-command-row">
+          <p class="manual-command">{{ manualToggleCommand }}</p>
+          <button
+            type="button"
+            :class="['theme-btn', { 'theme-btn--active': manualCommandCopied }]"
+            @click="copyToggleCommand"
+            @mouseleave="resetManualCommandCopied"
+          >
+            {{ manualCommandCopied ? "Skopiowano" : "Kopiuj" }}
+          </button>
+        </div>
+        <ol v-if="isGnomeDesktop" class="shortcuts-list">
+          <li class="shortcuts-item">
+            Otwórz Ustawienia → Klawiatura → Pokaż i dostosuj skróty → Własne skróty.
+          </li>
+          <li class="shortcuts-item">
+            Dodaj nowy skrót, wklej skopiowaną komendę i wybierz klawisze.
+          </li>
+          <li class="shortcuts-item">
+            Zaznacz tekst przed użyciem skrótu (czytany jest schowek PRIMARY, wymagany pakiet
+            wl-clipboard).
+          </li>
+        </ol>
+        <div v-else>
+          <p class="text-status text-status--hint">
+            <template v-if="detectedDesktopEnvironment !== 'unknown'">
+              Wykryto środowisko: {{ detectedDesktopEnvironment }}.
+            </template>
+            Dodaj własny skrót w ustawieniach systemu wskazujący na powyższą komendę.
+          </p>
+          <ol class="shortcuts-list">
+            <li class="shortcuts-item">Wklej skopiowaną komendę jako akcję skrótu.</li>
+            <li class="shortcuts-item">
+              Zaznacz tekst przed użyciem skrótu (czytany jest schowek PRIMARY, wymagany pakiet
+              wl-clipboard).
+            </li>
+          </ol>
+        </div>
+      </div>
+      <form v-else-if="isShortcutLoaded" class="search-row" @submit.prevent="save">
         <div class="search-field">
           <input
             class="search-input"
@@ -89,10 +147,10 @@
           Zapisz
         </button>
       </form>
-      <p v-if="shortcutError" class="search-status search-status--error" role="alert">
+      <p v-if="shortcutError" class="text-status text-status--error" role="alert">
         {{ shortcutError }}
       </p>
-      <p v-if="shortcutSaved" class="search-status" role="status">Zapisano skrót.</p>
+      <p v-if="shortcutSaved" class="text-status" role="status">Zapisano skrót.</p>
     </div>
   </section>
 </template>

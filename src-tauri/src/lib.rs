@@ -21,6 +21,9 @@ pub fn run() {
         .plugin(autostart::autostart_plugin())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
+        .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
+            shortcut::handle_toggle(app, &argv);
+        }))
 
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_user_input::init())
@@ -28,6 +31,9 @@ pub fn run() {
             db::manager::search_synonyms,
             window::quit_app_command,
             shortcut::register_shortcut,
+            shortcut::is_manual_shortcut,
+            shortcut::get_toggle_command,
+            shortcut::get_desktop_environment,
             store::get_shortcut,
             accent::get_accent_color
         ])
@@ -48,6 +54,11 @@ pub fn run() {
 
             if let Err(e) = tray::setup_tray(app) {
                 eprintln!("[Synonik] Failed to create tray icon: {e}");
+            }
+
+            // Cold start via `synonik --toggle` with no instance running.
+            if std::env::args().any(|a| a == "--toggle") {
+                shortcut::handle_toggle(app.handle(), &std::env::args().collect::<Vec<_>>());
             }
 
             Ok(())

@@ -1,0 +1,8 @@
+[advisories]
+ignore = [
+    # RUSTSEC-2024-0429: glib VariantStrIter unsoundness (>=0.15.0, <0.20.0).
+    # Transitive via tauri -> wry -> webkit2gtk -> gtk 0.18.2 -> glib 0.18.5 (pinned to ^0.18).
+    # No fixed 0.18.x release exists yet; fix is only in >=0.20.0, unreachable without a
+    # major Tauri/wry upgrade. No direct use of VariantStrIter in src/. Revisit on glib 0.18.6 or Tauri upgrade.
+    "RUSTSEC-2024-0429",
+]

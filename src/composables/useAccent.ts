@@ -12,16 +12,12 @@ export async function loadSystemAccent(): Promise<void> {
   try {
     const accent = await invoke<string | null>("get_accent_color");
     if (!accent) return;
-    const parts = accent
-      .replace("rgba(", "")
-      .replace(")", "")
-      .split(",")
-      .map((part) => Number.parseInt(part.trim(), 10));
-    if (parts.length < 3) return;
-    const [red, green, blue] = parts;
-    const inRange = (value: number): boolean =>
-      Number.isInteger(value) && value >= 0 && value <= 255;
-    if (!inRange(red) || !inRange(green) || !inRange(blue)) return;
+    const m = accent.trim().match(/^#([0-9a-fA-F]{6})$/);
+    if (!m) return;
+    const hex = m[1];
+    const red = Number.parseInt(hex.slice(0, 2), 16);
+    const green = Number.parseInt(hex.slice(2, 4), 16);
+    const blue = Number.parseInt(hex.slice(4, 6), 16);
     const root = document.documentElement.style;
     root.setProperty("--syn-accent", `rgb(${red}, ${green}, ${blue})`);
     root.setProperty(
