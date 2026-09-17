@@ -6,6 +6,7 @@ pub fn prepare_store(app: &tauri::App) -> Result<(), Box<dyn Error>> {
     let store = app.store("settings.json")?;
     if !store.has("shortcut") {
         store.set("shortcut", "Control+F2");
+        store.save()?;
     }
     Ok(())
 }
