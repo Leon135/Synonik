@@ -24,13 +24,13 @@ pub fn run() {
         .plugin(tauri_plugin_single_instance::init(|app, argv, _cwd| {
             shortcut::handle_toggle(app, &argv);
         }))
-
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_user_input::init())
         .invoke_handler(tauri::generate_handler![
             db::manager::search_synonyms,
             window::quit_app_command,
             shortcut::register_shortcut,
+            shortcut::take_pending_toggle,
             shortcut::is_manual_shortcut,
             shortcut::get_toggle_command,
             shortcut::get_desktop_environment,
@@ -48,6 +48,7 @@ pub fn run() {
             )?;
 
             app.manage(DbState(Mutex::new(conn)));
+            app.manage(shortcut::PendingToggle::new());
 
             store::prepare_store(app)?;
             shortcut::register_shortcut_on_start(app)?;

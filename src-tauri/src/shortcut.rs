@@ -16,6 +16,14 @@ impl CurrentShortcut {
     }
 }
 
+pub struct PendingToggle(pub Mutex<Option<String>>);
+
+impl PendingToggle {
+    pub fn new() -> Self {
+        Self(Mutex::new(None))
+    }
+}
+
 fn read_clipboard(app: &tauri::AppHandle) -> String {
     app.clipboard().read_text().unwrap_or_default()
 }
@@ -45,7 +53,11 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
     let user_input = app.user_input();
     let previous_clipboard = read_clipboard(app);
 
-    user_input.key(monio::Key::ControlLeft, EventType::KeyPress).ok();
+    let _ = app.clipboard().write_text(String::new());
+
+    user_input
+        .key(monio::Key::ControlLeft, EventType::KeyPress)
+        .ok();
     user_input.key(monio::Key::KeyC, EventType::KeyClick).ok();
     user_input
         .key(monio::Key::ControlLeft, EventType::KeyRelease)
@@ -54,7 +66,7 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
     let mut new_clipboard = read_clipboard(app);
     let mut wait_time = 50;
     for _ in 0..5 {
-        if new_clipboard != previous_clipboard && !new_clipboard.is_empty() {
+        if !new_clipboard.is_empty() {
             break;
         }
         std::thread::sleep(std::time::Duration::from_millis(wait_time));
@@ -62,8 +74,8 @@ fn get_selected_text(app: &tauri::AppHandle) -> String {
         wait_time *= 2;
     }
 
-    let _ = app.clipboard().write_text(previous_clipboard.clone());
-    if new_clipboard == previous_clipboard || new_clipboard.is_empty() {
+    let _ = app.clipboard().write_text(previous_clipboard);
+    if new_clipboard.is_empty() {
         return String::new();
     }
     new_clipboard
@@ -73,9 +85,21 @@ pub(crate) fn handle_shortcut_action(app: &tauri::AppHandle) {
     let app = app.clone();
     std::thread::spawn(move || {
         let selected_text = get_selected_text(&app);
+        if let Some(pending) = app.try_state::<PendingToggle>() {
+            if let Ok(mut guard) = pending.0.lock() {
+                *guard = Some(selected_text.clone());
+            }
+        }
         show_app(&app);
         let _ = app.emit_to("main", "shortcut-pressed-input", selected_text);
     });
+}
+
+#[tauri::command]
+pub fn take_pending_toggle(app: tauri::AppHandle) -> Option<String> {
+    app.try_state::<PendingToggle>()
+        .and_then(|s| s.0.lock().ok())
+        .and_then(|mut guard| guard.take())
 }
 
 pub(crate) fn handle_toggle(app: &tauri::AppHandle, argv: &[String]) {

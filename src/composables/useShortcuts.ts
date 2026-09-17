@@ -1,4 +1,5 @@
 import { onMounted, onUnmounted, type Ref } from "vue";
+import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import hotkeys from "hotkeys-js";
 
@@ -17,6 +18,16 @@ export default function useShortcuts(
       wordInput.value = event.payload as string;
       getSynonyms(event.payload as string);
     });
+
+    try {
+      const pending = await invoke<string | null>("take_pending_toggle");
+      if (pending) {
+        wordInput.value = pending;
+        getSynonyms(pending);
+      }
+    } catch (error) {
+      console.error("[Synonik] Failed to take pending toggle:", error);
+    }
 
     hotkeys("ctrl+l,/", (event: KeyboardEvent) => {
       event.preventDefault();
