@@ -97,9 +97,9 @@ pub(crate) fn handle_shortcut_action(app: &tauri::AppHandle) {
 
 #[tauri::command]
 pub fn take_pending_toggle(app: tauri::AppHandle) -> Option<String> {
-    app.try_state::<PendingToggle>()
-        .and_then(|s| s.0.lock().ok())
-        .and_then(|mut guard| guard.take())
+    let pending_toggle = app.try_state::<PendingToggle>()?;
+    let mut pending_guard = pending_toggle.0.lock().ok()?;
+    pending_guard.take()
 }
 
 pub(crate) fn handle_toggle(app: &tauri::AppHandle, argv: &[String]) {
@@ -150,6 +150,9 @@ pub fn get_desktop_environment() -> String {
 
 #[tauri::command]
 pub fn get_toggle_command() -> String {
+    if let Some(appimage_path) = std::env::var_os("APPIMAGE").filter(|path| !path.is_empty()) {
+        return format!("\"{}\" --toggle", appimage_path.to_string_lossy());
+    }
     match std::env::current_exe() {
         Ok(exe_path) => format!("\"{}\" --toggle", exe_path.display()),
         Err(_) => "synonik --toggle".to_string(),
