@@ -49,6 +49,16 @@ pub fn prepare_db(app: &tauri::App) -> Result<(), Box<dyn Error>> {
             .into()
         })?;
         fs::copy(&source, &db_path)?;
+    } else if let Some(source) = find_source_db(app) {
+        let dest_len = fs::metadata(&db_path).map(|m| m.len()).ok();
+        let src_len = fs::metadata(&source).map(|m| m.len()).ok();
+        if let (Some(d), Some(s)) = (dest_len, src_len) {
+            if d != s {
+                if let Err(e) = fs::copy(&source, &db_path) {
+                    eprintln!("[Synonik] Failed to update database: {e}");
+                }
+            }
+        }
     }
     Ok(())
 }

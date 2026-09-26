@@ -15,9 +15,10 @@ Select a word, press a shortcut, and get synonyms instantly. Or search directly 
 - Global customizable hotkey (default `Ctrl+F2`) — select text, press the shortcut, see synonyms
 - In-app shortcuts: `Enter` to search, `Ctrl+L` or `/` to focus the search field
 - Click a synonym to search it
-- Dark / light / system theme with persistence
+- Dark / light / system theme with persistence (localStorage)
 - System accent color detection (Windows + GNOME)
-- Interface scale presets (50–200%) with persistence
+- Interface scale presets (50–200%) with persistence (localStorage)
+- Global shortcut persisted in `settings.json` via tauri-plugin-store
 - System tray icon: show, autostart, quit
 - Linux support (AppImage; X11 should work without issues; on Wayland the primary selection is used)
 - Custom titlebar with minimize/close buttons

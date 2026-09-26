@@ -3748,7 +3748,7 @@ dependencies = [
 
 [[package]]
 name = "synonik"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "diesel",
  "libsqlite3-sys",

@@ -25,6 +25,7 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
         eprintln!("[Synonik] Default icon not found");
         return Ok(());
     };
+    let autostart_for_event = Arc::clone(&autostart);
     let _tray = TrayIconBuilder::new()
         .icon(default_icon)
         .tooltip("Synonik")
@@ -37,6 +38,8 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
                 }
                 "autostart" => {
                     toggle_autostart(app);
+                    let enabled = is_autostart_enabled(app);
+                    let _ = autostart_for_event.set_checked(enabled);
                 }
                 "quit" => {
                     quit_app(app);
@@ -44,16 +47,16 @@ pub fn setup_tray(app: &tauri::App) -> tauri::Result<()> {
                 _ => {}
             },
         )
-        .on_tray_icon_event(|tray, event| match event {
-            TrayIconEvent::DoubleClick {
+        .on_tray_icon_event(|tray, event| {
+            if let TrayIconEvent::DoubleClick {
                 id: _id,
                 position: _position,
                 rect: _rect,
                 button: MouseButton::Left,
-            } => {
+            } = event
+            {
                 show_app(tray.app_handle());
             }
-            _ => {}
         })
         .build(app)?;
     Ok(())
