@@ -37,10 +37,7 @@ console.log(`  Cargo.toml -> ${version}`);
 // Cargo.lock
 const lockPath = join(root, "src-tauri", "Cargo.lock");
 const lock = readFileSync(lockPath, "utf-8");
-const lockUpdated = lock.replace(
-  /(name = "synonik"\nversion = ")[^"]+(")/,
-  `$1${version}$2`,
-);
+const lockUpdated = lock.replace(/(name = "synonik"\nversion = ")[^"]+(")/, `$1${version}$2`);
 if (lockUpdated !== lock) {
   writeFileSync(lockPath, lockUpdated);
   console.log(`  Cargo.lock -> ${version}`);
