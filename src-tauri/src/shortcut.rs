@@ -87,7 +87,11 @@ pub(crate) fn handle_shortcut_action(app: &tauri::AppHandle) {
         let selected_text = get_selected_text(&app);
         if let Some(pending) = app.try_state::<PendingToggle>() {
             if let Ok(mut guard) = pending.0.lock() {
-                *guard = Some(selected_text.clone());
+                *guard = if selected_text.is_empty() {
+                    None
+                } else {
+                    Some(selected_text.clone())
+                };
             }
         }
         show_app(&app);
