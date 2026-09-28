@@ -4,14 +4,17 @@
   "version": "0.3.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview",
+    "dev:web": "vite",
+    "build:web": "vue-tsc --noEmit && vite build",
+    "preview:web": "vite preview",
+    "dev:tauri": "NO_STRIP=1 tauri dev",
+    "build:tauri": "NO_STRIP=1 tauri build",
+    "build:appimage": "NO_STRIP=1 tauri build --bundles appimage",
+    "tauri": "NO_STRIP=1 tauri",
     "release": "node scripts/release.mjs",
     "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
-    "format": "prettier --write .",
-    "tauri": "tauri"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@tauri-apps/api": "^2.11.1",

@@ -68,29 +68,42 @@ Database builder is here: [Github repo](https://github.com/Leon135/Synonik-db-bu
 ```sh
 bun install
 cd src-tauri && cargo check && cd ..
-bun tauri dev
+bun run dev:tauri
 ```
 
 ### Build
 
 ```sh
-bun run tauri build
+bun run build:tauri
 ```
 
 The installer will be in `src-tauri/target/release/bundle/`.
 
 ### Scripts
 
-| Command                | Description                                                     |
-| ---------------------- | --------------------------------------------------------------- |
-| `bun dev`              | Start Vite dev server                                           |
-| `bun run build`        | TypeScript + Vite build                                         |
-| `bun release <semver>` | Bump version in `package.json`, `tauri.conf.json`, `Cargo.toml` |
-| `bun lint`             | ESLint + Prettier check (format + lint)                         |
-| `bun lint:fix`         | ESLint + Prettier auto-fix everything                           |
-| `bun format`           | Prettier format only                                            |
-| `bun tauri dev`        | Run app in dev mode                                             |
-| `bun tauri build`      | Build installer bundle                                          |
+| Command                    | Description                                                     |
+| -------------------------- | --------------------------------------------------------------- |
+| `bun run dev:web`          | Start Vite dev server (frontend only)                           |
+| `bun run build:web`        | TypeScript + Vite build (frontend only)                         |
+| `bun run preview:web`      | Preview the built frontend                                      |
+| `bun run dev:tauri`        | Run the app in dev mode                                         |
+| `bun run build:tauri`      | Build installer bundle (all platform targets)                   |
+| `bun run build:appimage`   | Build the Linux AppImage only                                   |
+| `bun run release <semver>` | Bump version in `package.json`, `tauri.conf.json`, `Cargo.toml` |
+| `bun run lint`             | ESLint + Prettier check (format + lint)                         |
+| `bun run lint:fix`         | ESLint + Prettier auto-fix everything                           |
+| `bun run format`           | Prettier format only                                            |
+| `bun run tauri <cmd>`      | Raw passthrough to the Tauri CLI (`info`, `--help`, …)          |
+
+> **Note on `NO_STRIP`**
+> The Tauri CLI builds AppImages with a bundled `linuxdeploy` that ships its own
+> `strip` (GNU binutils 2.35), which cannot read the RELR relocations
+> (`.relr.dyn`) used by Fedora's libraries. The build dies with
+> `Strip call failed: … unknown type [0x13] section '.relr.dyn'`
+> (see [tauri#11149](https://github.com/tauri-apps/tauri/issues/11149)).
+> All `:tauri` scripts set `NO_STRIP=1` to skip that step. This is a no-op on
+> other platforms, and costs nothing on Linux because Fedora's `/lib64` libraries
+> are already stripped.
 
 ### Stack
 

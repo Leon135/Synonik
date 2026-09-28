@@ -4,9 +4,9 @@
   "version": "0.3.0",
   "identifier": "com.synonik.app",
   "build": {
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "bun run dev:web",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "bun run build",
+    "beforeBuildCommand": "bun run build:web",
     "frontendDist": "../dist"
   },
   "app": {
@@ -43,7 +43,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["appimage", "nsis", "msi", "app", "dmg"],
     "resources": {
       "../database.sqlite": "database.sqlite"
     },
