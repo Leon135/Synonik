@@ -73,3 +73,32 @@ jobs:
           releaseDraft: true
           prerelease: false
           args: --bundles appimage
+
+      # The AppImage bundles ubuntu's libwayland-client (1.22) while libEGL,
+      # libgbm and libdrm come from the host. On Mesa 25+ the host libEGL binds
+      # the stale bundled copy, EGL init fails with EGL_BAD_ALLOC and the
+      # WebKit aux process aborts, taking the app down with exit code 6.
+      # Dropping the bundled libwayland lets the host copy satisfy the soname.
+      - name: strip stale libwayland from AppImage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          appdir=$(echo src-tauri/target/release/bundle/appimage/*.AppDir)
+          asset="src-tauri/target/release/bundle/appimage/Synonik_${version}_amd64.AppImage"
+
+          [ -d "$appdir" ] || { echo "no AppDir found" >&2; exit 1; }
+
+          curl -sSL -o /tmp/appimagetool \
+            "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+          chmod +x /tmp/appimagetool
+
+          rm -f "$appdir"/usr/lib/libwayland-client.so.0 \
+                "$appdir"/usr/lib/libwayland-cursor.so.0 \
+                "$appdir"/usr/lib/libwayland-egl.so.1
+
+          ARCH=x86_64 /tmp/appimagetool --no-appstream "$appdir" "$asset"
+          [ -f "$asset" ] || { echo "repack produced no asset" >&2; exit 1; }
+
+          gh release upload "app-v${version}" "$asset" --clobber
