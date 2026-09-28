@@ -27,9 +27,23 @@ fn accent_name_to_hex(name: &str) -> Option<&'static str> {
 }
 
 #[cfg(target_os = "linux")]
+fn dconf_read(path: &str) -> Option<String> {
+    let out = std::process::Command::new("dconf")
+        .args(["read", path])
+        .output()
+        .ok()?;
+    if !out.status.success() {
+        return None;
+    }
+    Some(String::from_utf8_lossy(&out.stdout).trim().to_string())
+}
+
+#[cfg(target_os = "linux")]
 fn get_accent_color_inner() -> Option<String> {
-    accent_name_to_hex(&gsettings("org.gnome.desktop.interface", "accent-color")?)
-        .map(|s| s.to_string())
+    let stored =
+        dconf_read("/org/gnome/desktop/interface/accent-color").filter(|value| !value.is_empty());
+    let fallback = gsettings("org.gnome.desktop.interface", "accent-color");
+    accent_name_to_hex(&stored.or(fallback)?).map(|s| s.to_string())
 }
 
 #[cfg(windows)]
